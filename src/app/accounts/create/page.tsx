@@ -119,8 +119,8 @@ export default function CreateAccountPage() {
           </Button>
         </Link>
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Create Account</h1>
-          <p style={{ color: "hsl(var(--muted-foreground))" }}>
+          <h1 className="text-xl font-semibold">Create Account</h1>
+          <p className="text-muted-foreground">
             Add a new business account to your portfolio.
           </p>
         </div>
@@ -165,7 +165,7 @@ export default function CreateAccountPage() {
                 {errors.externalId && (
                   <p className="text-sm text-red-500">{errors.externalId}</p>
                 )}
-                <p className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>
+                <p className="text-xs text-muted-foreground">
                   Unique identifier from your banking system
                 </p>
               </div>
@@ -234,7 +234,7 @@ export default function CreateAccountPage() {
                   value={formData.wireAccountNumber}
                   onChange={(e) => handleInputChange("wireAccountNumber", e.target.value)}
                 />
-                <p className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>
+                <p className="text-xs text-muted-foreground">
                   Can be added later
                 </p>
               </div>
@@ -251,7 +251,7 @@ export default function CreateAccountPage() {
 
               <div className="rounded-lg bg-muted p-4">
                 <h4 className="text-sm font-medium mb-2">Note</h4>
-                <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>
+                <p className="text-sm text-muted-foreground">
                   Banking information is optional during account creation. You can add wire
                   account and routing numbers once the account is activated.
                 </p>
