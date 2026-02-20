@@ -133,7 +133,9 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
 
   const isActive = (href?: string) => {
     if (!href) return false;
-    return pathname === href || pathname.startsWith(href + "/");
+    // Strip query parameters from href for comparison
+    const hrefPath = href.split('?')[0];
+    return pathname === hrefPath || pathname.startsWith(hrefPath + "/");
   };
 
   return (
