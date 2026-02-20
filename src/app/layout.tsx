@@ -6,6 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { AccountsProvider } from "@/lib/context/AccountsContext";
+import { TransactionsProvider } from "@/lib/context/TransactionsContext";
+import { PaymentsProvider } from "@/lib/context/PaymentsContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,7 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Instance Cloud | B2B Fintech Banking Dashboard",
+  title: "STVBLE | B2B Fintech Banking Dashboard",
   description: "Professional banking dashboard for B2B fintech operations",
 };
 
@@ -39,10 +41,14 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AccountsProvider>
-            <TooltipProvider>
-              <AppShell>{children}</AppShell>
-              <Toaster position="top-right" />
-            </TooltipProvider>
+            <PaymentsProvider>
+              <TransactionsProvider>
+                <TooltipProvider>
+                  <AppShell>{children}</AppShell>
+                  <Toaster position="top-right" />
+                </TooltipProvider>
+              </TransactionsProvider>
+            </PaymentsProvider>
           </AccountsProvider>
         </ThemeProvider>
       </body>

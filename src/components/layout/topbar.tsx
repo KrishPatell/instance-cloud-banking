@@ -44,6 +44,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 interface TopbarProps {
   onMenuClick: () => void;
   sidebarCollapsed?: boolean;
+  onSearchClick?: () => void;
 }
 
 const navigationItems = [
@@ -61,7 +62,7 @@ const actionItems = [
   { label: "Simulate inbound payment", href: "/sandbox", icon: FlaskConical },
 ];
 
-export function Topbar({ onMenuClick, sidebarCollapsed = false }: TopbarProps) {
+export function Topbar({ onMenuClick, sidebarCollapsed = false, onSearchClick }: TopbarProps) {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
   const [commandOpen, setCommandOpen] = React.useState(false);
@@ -139,7 +140,10 @@ export function Topbar({ onMenuClick, sidebarCollapsed = false }: TopbarProps) {
               backgroundColor: "hsl(var(--muted))",
               borderColor: "transparent",
             }}
-            onClick={() => setCommandOpen(true)}
+            onClick={() => {
+              setCommandOpen(true);
+              onSearchClick?.();
+            }}
           />
           <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
             <kbd

@@ -20,6 +20,10 @@ import {
   ChevronLeft,
   ChevronRight,
   Grid3X3,
+  LayoutDashboard,
+  CreditCard,
+  Settings,
+  HelpCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -86,6 +90,11 @@ const navItems = [
     icon: ArrowUpDown,
   },
   {
+    title: "Cards",
+    href: "/cards",
+    icon: CreditCard,
+  },
+  {
     title: "Batch payments",
     href: "/batch-payments",
     icon: Layers,
@@ -96,9 +105,19 @@ const navItems = [
     icon: FileText,
   },
   {
-    title: "Customers",
-    href: "/customers",
+    title: "Clients",
+    href: "/clients",
     icon: Users2,
+  },
+  {
+    title: "Settings",
+    href: "/settings",
+    icon: Settings,
+  },
+  {
+    title: "Help",
+    href: "/help",
+    icon: HelpCircle,
   },
 ];
 
@@ -140,7 +159,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           {!collapsed && (
             <div className="flex items-center gap-2">
               <Grid3X3 className="h-5 w-5 text-white" />
-              <span className="font-serif font-bold text-white text-xl">Instance Cloud</span>
+              <span className="font-serif font-bold text-white text-xl">STVBLE</span>
             </div>
           )}
           <Button
@@ -183,7 +202,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                             itemActive && "bg-primary/10 text-primary"
                           )}
                           style={{
-                            color: itemActive ? "hsl(var(--primary))" : "hsl(210 20% 85% / 0.7)",
+                            color: itemActive ? "hsl(var(--primary))" : "#94a3b8",
                           }}
                         >
                           <Icon className="h-5 w-5" />
@@ -204,7 +223,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                         itemActive && "bg-primary/10 text-primary"
                       )}
                       style={{
-                        color: itemActive ? "hsl(var(--primary))" : "hsl(210 20% 85% / 0.7)",
+                        color: itemActive ? "hsl(var(--primary))" : "#94a3b8",
                       }}
                       onClick={() => toggleGroup(item.title)}
                     >
@@ -232,7 +251,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                                 childActive && "bg-primary/10 text-primary"
                               )}
                               style={{
-                                color: childActive ? "hsl(var(--primary))" : "hsl(210 20% 85% / 0.7)",
+                                color: childActive ? "hsl(var(--primary))" : "#94a3b8",
                               }}
                             >
                               <ChildIcon className="h-4 w-4" />
@@ -266,7 +285,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                           itemActive && "bg-primary/10"
                         )}
                         style={{
-                          color: itemActive ? "hsl(var(--primary))" : "hsl(210 20% 85% / 0.7)",
+                          color: itemActive ? "hsl(var(--primary))" : "#94a3b8",
                         }}
                       >
                         <Icon className="h-5 w-5" />
@@ -287,7 +306,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                     itemActive && "bg-primary/10 text-primary border-l-2 border-primary"
                   )}
                   style={{
-                    color: itemActive ? "hsl(var(--primary))" : "hsl(210 20% 85% / 0.7)",
+                    color: itemActive ? "hsl(var(--primary))" : "#94a3b8",
                   }}
                 >
                   <Icon className="h-5 w-5" />
