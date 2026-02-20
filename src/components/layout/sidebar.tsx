@@ -17,35 +17,25 @@ import {
   Layers,
   FileText,
   Users2,
-  ChevronLeft,
-  ChevronRight,
   Grid3X3,
   LayoutDashboard,
   CreditCard,
   Settings,
   HelpCircle,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 interface SidebarProps {
-  collapsed: boolean;
-  onToggle: () => void;
+  collapsed?: boolean;
+  onToggle?: () => void;
 }
 
 const navItems = [
   {
-    title: "Stivble",
+    title: "Dashboard",
     href: "/",
-    icon: Building2,
-    hasChevron: true,
+    icon: LayoutDashboard,
   },
   {
     title: "Create a payment",
@@ -108,6 +98,9 @@ const navItems = [
     href: "/clients",
     icon: Users2,
   },
+];
+
+const bottomNavItems = [
   {
     title: "Settings",
     href: "/settings",
@@ -120,10 +113,14 @@ const navItems = [
   },
 ];
 
-export function Sidebar({ collapsed, onToggle }: SidebarProps) {
+export function Sidebar({ collapsed: initialCollapsed = false, onToggle }: SidebarProps) {
   const pathname = usePathname();
   const [expandedGroups, setExpandedGroups] = React.useState<string[]>(["Create a payment"]);
+  const [isHovered, setIsHovered] = React.useState(false);
 
+  // On hover, expand; otherwise use initial state
+  const isExpanded = isHovered || initialCollapsed === false;
+  
   const toggleGroup = (title: string) => {
     setExpandedGroups((prev) =>
       prev.includes(title) ? prev.filter((t) => t !== title) : [...prev, title]
@@ -132,119 +129,85 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
 
   const isActive = (href?: string) => {
     if (!href) return false;
-    
-    // Strip query parameters from href for comparison
     const hrefPath = href.split('?')[0];
     const hrefQuery = href.split('?')[1];
     
-    // If href has query params, only exact pathname match counts as active
     if (hrefQuery) {
       return pathname === hrefPath;
     }
-    // For base paths without query params, check if pathname starts with it
     return pathname.startsWith(hrefPath + "/") || pathname === hrefPath;
   };
 
   return (
-    <TooltipProvider delayDuration={0}>
-      <aside
-        className={cn(
-          "fixed left-0 top-0 z-40 h-screen flex flex-col transition-all duration-300",
-          collapsed ? "w-16" : "w-60"
-        )}
-        style={{
-          backgroundColor: "hsl(222 47% 8%)",
-          borderRight: "1px solid hsl(222 30% 15%)",
-        }}
-      >
+    <aside
+      className="fixed left-0 top-0 z-40 h-screen border-r bg-[hsl(222_47%_8%)] transition-all duration-200 ease-out"
+      style={{ width: isExpanded ? "240px" : "64px" }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="flex h-full flex-col">
         {/* Logo */}
-        <div
-          className={cn(
-            "flex h-14 items-center border-b px-3",
-            collapsed ? "justify-center" : "justify-between"
-          )}
-          style={{ borderColor: "hsl(222 30% 15%)" }}
-        >
-          {!collapsed && (
-            <div className="flex items-center gap-2">
-              <Grid3X3 className="h-5 w-5 text-white" />
-              <span className="font-serif font-bold text-white text-xl">STVBLE</span>
+        <div className="flex h-14 items-center border-b border-white/10 px-4">
+          <Link href="/" className="flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white">
+              <Grid3X3 className="h-5 w-5 text-slate-900" />
             </div>
-          )}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onToggle}
-            className={cn(
-              collapsed && "absolute -right-3 top-3 h-6 w-6 rounded-full border shadow-md bg-[hsl(222_47%_8%)] text-white hover:bg-white/10"
-            )}
-          >
-            {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-          </Button>
+            <span 
+              className={cn(
+                "font-serif font-bold text-xl text-white whitespace-nowrap overflow-hidden transition-all duration-200",
+                isExpanded ? "opacity-100 w-auto" : "opacity-0 w-0"
+              )}
+            >
+              STVBLE
+            </span>
+          </Link>
         </div>
 
-        {collapsed && (
-          <div className="flex justify-center border-b py-3" style={{ borderColor: "hsl(222 30% 15%)" }}>
-            <Grid3X3 className="h-5 w-5 text-white" />
-          </div>
-        )}
-
         {/* Navigation */}
-        <ScrollArea className="flex-1 px-2 py-4">
-          <nav className="flex flex-col gap-1">
-            {navItems.map((item, index) => {
+        <ScrollArea className="flex-1 py-4">
+          <nav className="space-y-1 px-2">
+            {navItems.map((item, idx) => {
               const Icon = item.icon;
+              const isGroupExpanded = expandedGroups.includes(item.title);
               const itemActive = isActive(item.href);
 
-              // Handle groups with children
               if (item.children) {
-                const isExpanded = expandedGroups.includes(item.title);
-
-                if (collapsed) {
-                  return (
-                    <Tooltip key={item.title}>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          className={cn(
-                            "flex h-10 w-10 items-center justify-center rounded-md",
-                            itemActive && "bg-primary/10 text-white"
-                          )}
-                          style={{
-                            color: itemActive ? "#ffffff" : "#94a3b8",
-                          }}
-                        >
-                          <Icon className="h-5 w-5" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent side="right">{item.title}</TooltipContent>
-                    </Tooltip>
-                  );
-                }
-
+                // Dropdown group
                 return (
                   <div key={item.title}>
-                    <Button
-                      variant="ghost"
+                    <button
+                      onClick={() => toggleGroup(item.title)}
                       className={cn(
-                        "flex h-10 w-full items-center justify-between rounded-md px-3 text-sm font-medium",
-                        "hover:bg-white/5 hover:text-white",
-                        itemActive && "bg-primary/10 text-white"
+                        "flex w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                        "text-slate-400 hover:bg-white/5 hover:text-white",
                       )}
                       style={{
-                        color: itemActive ? "#ffffff" : "#94a3b8",
+                        color: isGroupExpanded ? "#ffffff" : "#94a3b8",
                       }}
-                      onClick={() => toggleGroup(item.title)}
                     >
                       <div className="flex items-center gap-3">
-                        <Icon className="h-5 w-5" />
-                        {item.title}
+                        <Icon className="h-5 w-5 shrink-0" />
+                        <span 
+                          className={cn(
+                            "whitespace-nowrap overflow-hidden transition-all duration-200",
+                            isExpanded ? "opacity-100" : "opacity-0 w-0"
+                          )}
+                        >
+                          {item.title}
+                        </span>
                       </div>
                       <ChevronRight
-                        className={cn("h-4 w-4 transition-transform", isExpanded && "rotate-90")}
+                        className={cn(
+                          "h-4 w-4 shrink-0 transition-transform duration-200",
+                          isExpanded && "rotate-90"
+                        )}
+                        style={{
+                          transform: isGroupExpanded && isExpanded ? "rotate(90deg)" : "rotate(0deg)",
+                          opacity: isExpanded ? 1 : 0,
+                        }}
                       />
-                    </Button>
-                    {isExpanded && (
+                    </button>
+                    {isGroupExpanded && isExpanded && (
                       <div className="ml-4 mt-1 space-y-1 border-l border-white/10 pl-2">
                         {item.children.map((child) => {
                           const ChildIcon = child.icon;
@@ -257,22 +220,14 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                               className={cn(
                                 "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                                 "hover:bg-white/5 hover:text-white",
-                                childActive && "bg-primary/10 text-white"
+                                childActive && "bg-white/10 text-white"
                               )}
                               style={{
                                 color: childActive ? "#ffffff" : "#94a3b8",
                               }}
                             >
-                              <ChildIcon className="h-4 w-4" />
-                              <span>{child.title}</span>
-                              {child.label && (
-                                <span
-                                  className="ml-auto rounded bg-primary/20 px-1.5 py-0.5 text-xs font-semibold"
-                                  style={{ color: "hsl(var(--primary))" }}
-                                >
-                                  {child.label}
-                                </span>
-                              )}
+                              <ChildIcon className="h-4 w-4 shrink-0" />
+                              <span className="whitespace-nowrap">{child.title}</span>
                             </Link>
                           );
                         })}
@@ -282,79 +237,90 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                 );
               }
 
-              // Handle single items
-              if (collapsed) {
-                return (
-                  <Tooltip key={item.href || item.title}>
-                    <TooltipTrigger asChild>
-                      <Link
-                        href={item.href || "#"}
-                        className={cn(
-                          "flex h-10 w-10 items-center justify-center rounded-md transition-colors",
-                          itemActive && "bg-primary/10"
-                        )}
-                        style={{
-                          color: itemActive ? "#ffffff" : "#94a3b8",
-                        }}
-                      >
-                        <Icon className="h-5 w-5" />
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent side="right">{item.title}</TooltipContent>
-                  </Tooltip>
-                );
-              }
-
+              // Regular nav item
               return (
                 <Link
-                  key={item.href || item.title}
-                  href={item.href || "#"}
+                  key={item.href}
+                  href={item.href}
                   className={cn(
-                    "flex h-10 items-center gap-3 rounded-md px-3 text-sm font-medium transition-colors",
+                    "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                     "hover:bg-white/5 hover:text-white",
-                    itemActive && "bg-primary/10 text-white border-l-2 border-white"
+                    itemActive && "bg-white/10 text-white border-l-2 border-white"
                   )}
                   style={{
                     color: itemActive ? "#ffffff" : "#94a3b8",
                   }}
                 >
-                  <Icon className="h-5 w-5" />
-                  {item.title}
-                  {item.hasChevron && <ChevronRight className="ml-auto h-4 w-4 opacity-50" />}
+                  <Icon className="h-5 w-5 shrink-0" />
+                  <span 
+                    className={cn(
+                      "whitespace-nowrap overflow-hidden transition-all duration-200",
+                      isExpanded ? "opacity-100" : "opacity-0 w-0"
+                    )}
+                  >
+                    {item.title}
+                  </span>
                 </Link>
               );
             })}
           </nav>
         </ScrollArea>
 
-        {/* Footer */}
-        <div
-          className={cn(
-            "border-t px-3 py-4",
-            collapsed && "flex flex-col items-center"
-          )}
-          style={{ borderColor: "hsl(222 30% 15%)" }}
-        >
-          {!collapsed && (
-            <>
-              <p className="text-xs text-muted-foreground/70">© 2026 Fuse Group Holdings Inc.</p>
-              <button className="text-xs text-muted-foreground/50 hover:text-muted-foreground cursor-pointer mt-1">
-                Privacy policy
-              </button>
-            </>
-          )}
-          {collapsed && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button className="text-xs text-muted-foreground/50 hover:text-muted-foreground cursor-pointer">
-                  © 2026
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="right">© 2026 Fuse Group Holdings Inc.</TooltipContent>
-            </Tooltip>
-          )}
+        {/* Bottom items */}
+        <div className="border-t border-white/10 p-2">
+          <Separator className="mb-2 bg-white/10" />
+          {bottomNavItems.map((item) => {
+            const Icon = item.icon;
+            const itemActive = isActive(item.href);
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                  "hover:bg-white/5 hover:text-white",
+                  itemActive && "bg-white/10 text-white"
+                )}
+                style={{
+                  color: itemActive ? "#ffffff" : "#94a3b8",
+                }}
+              >
+                <Icon className="h-5 w-5 shrink-0" />
+                <span 
+                  className={cn(
+                    "whitespace-nowrap overflow-hidden transition-all duration-200",
+                    isExpanded ? "opacity-100" : "opacity-0 w-0"
+                  )}
+                >
+                  {item.title}
+                </span>
+              </Link>
+            );
+          })}
         </div>
-      </aside>
-    </TooltipProvider>
+      </div>
+    </aside>
+  );
+}
+
+// Need ChevronRight icon
+function ChevronRight({ className, style }: { className?: string; style?: React.CSSProperties }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      style={style}
+    >
+      <path d="m9 18 6-6-6-6" />
+    </svg>
   );
 }
