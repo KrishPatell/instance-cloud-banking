@@ -133,9 +133,17 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
 
   const isActive = (href?: string) => {
     if (!href) return false;
+    
     // Strip query parameters from href for comparison
     const hrefPath = href.split('?')[0];
-    return pathname === hrefPath || pathname.startsWith(hrefPath + "/");
+    const hrefQuery = href.split('?')[1];
+    
+    // If href has query params, only exact pathname match counts as active
+    if (hrefQuery) {
+      return pathname === hrefPath;
+    }
+    // For base paths without query params, check if pathname starts with it
+    return pathname.startsWith(hrefPath + "/") || pathname === hrefPath;
   };
 
   return (
