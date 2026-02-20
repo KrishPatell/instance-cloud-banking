@@ -115,8 +115,14 @@ const bottomNavItems = [
 
 export function Sidebar({ collapsed: initialCollapsed = false, onToggle }: SidebarProps) {
   const pathname = usePathname();
+  const [searchParams, setSearchParams] = React.useState("");
   const [expandedGroups, setExpandedGroups] = React.useState<string[]>(["Create a payment"]);
   const [isHovered, setIsHovered] = React.useState(false);
+
+  // Get search params on mount
+  React.useEffect(() => {
+    setSearchParams(window.location.search);
+  }, []);
 
   // On hover, expand; otherwise use initial state
   const isExpanded = isHovered || initialCollapsed === false;
@@ -132,8 +138,17 @@ export function Sidebar({ collapsed: initialCollapsed = false, onToggle }: Sideb
     const hrefPath = href.split('?')[0];
     const hrefQuery = href.split('?')[1];
     
+    // If href has query params, check exact match with query params
     if (hrefQuery) {
-      return pathname === hrefPath;
+      // Extract the key parameter (tab or type)
+      const hrefParam = hrefQuery.split('&')[0].split('=')[0];
+      const hrefValue = hrefQuery.split('=')[1];
+      // Check if pathname matches AND the query param matches
+      return pathname === hrefPath && searchParams.includes(hrefParam) && searchParams.includes(hrefValue);
+    }
+    // For base paths without query params - don't match if we're on a child route with query
+    if (pathname === hrefPath && searchParams) {
+      return false;
     }
     return pathname.startsWith(hrefPath + "/") || pathname === hrefPath;
   };
