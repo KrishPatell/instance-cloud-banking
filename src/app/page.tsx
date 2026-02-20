@@ -116,7 +116,7 @@ export default function Dashboard() {
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
+            <h1 className="text-xl font-semibold">Dashboard</h1>
             <p className="text-sm text-muted-foreground mt-1">
               Welcome back! Here's what's happening with your accounts today.
             </p>
@@ -138,7 +138,7 @@ export default function Dashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className="relative overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+            <CardTitle className="text-sm font-semibold">Total Revenue</CardTitle>
             <div className="h-8 w-8 rounded-full bg-blue-500/10 flex items-center justify-center">
               <DollarSign className="h-4 w-4 text-blue-500" />
             </div>
@@ -155,7 +155,7 @@ export default function Dashboard() {
 
         <Card className="relative overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Active Accounts</CardTitle>
+            <CardTitle className="text-sm font-semibold">Active Accounts</CardTitle>
             <div className="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
               <Wallet className="h-4 w-4 text-emerald-500" />
             </div>
@@ -172,7 +172,7 @@ export default function Dashboard() {
 
         <Card className="relative overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Cards Issued</CardTitle>
+            <CardTitle className="text-sm font-semibold">Cards Issued</CardTitle>
             <div className="h-8 w-8 rounded-full bg-purple-500/10 flex items-center justify-center">
               <CreditCard className="h-4 w-4 text-purple-500" />
             </div>
@@ -189,7 +189,7 @@ export default function Dashboard() {
 
         <Card className="relative overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Transaction Volume</CardTitle>
+            <CardTitle className="text-sm font-semibold">Transaction Volume</CardTitle>
             <div className="h-8 w-8 rounded-full bg-amber-500/10 flex items-center justify-center">
               <Activity className="h-4 w-4 text-amber-500" />
             </div>

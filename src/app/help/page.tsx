@@ -4,7 +4,7 @@ export default function HelpPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold tracking-tight">Help & Support</h1>
+        <h1 className="text-xl font-semibold">Help & Support</h1>
         <p style={{ color: "var(--muted-foreground)" }}>
           Get help and access documentation.
         </p>

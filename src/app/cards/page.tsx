@@ -4,7 +4,7 @@ export default function CardsPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold tracking-tight">Cards</h1>
+        <h1 className="text-xl font-semibold">Cards</h1>
         <p style={{ color: "var(--muted-foreground)" }}>
           Manage corporate cards and spending limits.
         </p>
