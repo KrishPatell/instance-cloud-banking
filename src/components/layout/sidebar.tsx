@@ -212,7 +212,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                             itemActive && "bg-primary/10 text-white"
                           )}
                           style={{
-                            color: itemActive ? "hsl(var(--primary))" : "#94a3b8",
+                            color: itemActive ? "#ffffff" : "#94a3b8",
                           }}
                         >
                           <Icon className="h-5 w-5" />
@@ -233,7 +233,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                         itemActive && "bg-primary/10 text-white"
                       )}
                       style={{
-                        color: itemActive ? "hsl(var(--primary))" : "#94a3b8",
+                        color: itemActive ? "#ffffff" : "#94a3b8",
                       }}
                       onClick={() => toggleGroup(item.title)}
                     >
@@ -261,7 +261,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                                 childActive && "bg-primary/10 text-white"
                               )}
                               style={{
-                                color: childActive ? "hsl(var(--primary))" : "#94a3b8",
+                                color: childActive ? "#ffffff" : "#94a3b8",
                               }}
                             >
                               <ChildIcon className="h-4 w-4" />
@@ -295,7 +295,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                           itemActive && "bg-primary/10"
                         )}
                         style={{
-                          color: itemActive ? "hsl(var(--primary))" : "#94a3b8",
+                          color: itemActive ? "#ffffff" : "#94a3b8",
                         }}
                       >
                         <Icon className="h-5 w-5" />
@@ -316,7 +316,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                     itemActive && "bg-primary/10 text-white border-l-2 border-white"
                   )}
                   style={{
-                    color: itemActive ? "hsl(var(--primary))" : "#94a3b8",
+                    color: itemActive ? "#ffffff" : "#94a3b8",
                   }}
                 >
                   <Icon className="h-5 w-5" />
