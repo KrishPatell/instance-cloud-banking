@@ -157,7 +157,7 @@ function AccountStatementModal({ isOpen, onClose, accountName }: AccountStatemen
           </Button>
         </div>
 
-        <p className="text-sm mb-4" style={{ color: "hsl(var(--muted-foreground))" }}>
+        <p className="text-sm mb-4 text-muted-foreground">
           Select the month and year to generate a statement for {accountName}.
         </p>
 
@@ -224,7 +224,7 @@ export default function AccountDetailPage() {
   if (!account) {
     return (
       <div className="flex items-center justify-center h-[400px]">
-        <p style={{ color: "hsl(var(--muted-foreground))" }}>Account not found</p>
+        <p className="text-muted-foreground">Account not found</p>
       </div>
     );
   }
@@ -249,7 +249,7 @@ export default function AccountDetailPage() {
             <h1 className="text-2xl font-semibold tracking-tight">{account.name}</h1>
             <StatusBadge variant={account.status === "open" ? "open" : "pending"} />
           </div>
-          <p style={{ color: "hsl(var(--muted-foreground))" }}>{account.externalId}</p>
+          <p className="text-muted-foreground">{account.externalId}</p>
         </div>
         <Button variant="outline" onClick={() => setShowStatementModal(true)}>
           <FileText className="mr-2 h-4 w-4" />
@@ -388,7 +388,7 @@ export default function AccountDetailPage() {
                 />
               </div>
               {account.status !== "open" && (
-                <p className="mt-4 text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>
+                <p className="mt-4 text-sm text-muted-foreground">
                   Banking details can only be edited for open accounts.
                 </p>
               )}

@@ -193,7 +193,7 @@ export default function TransactionsPage() {
       {/* Header */}
       <div className="flex flex-col gap-2">
         <h1 className="text-xl font-semibold">Transactions</h1>
-        <p style={{ color: "hsl(var(--muted-foreground))" }}>
+        <p className="text-muted-foreground">
           View and manage all transaction history.
         </p>
       </div>
