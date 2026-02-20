@@ -4,7 +4,6 @@ import { useState, useMemo } from "react";
 import { toast } from "sonner";
 import { FlaskConical, CheckCircle2, Loader2 } from "lucide-react";
 import { useAccounts } from "@/lib/context/AccountsContext";
-import { Account } from "@/types/payment";
 import { useTransactions } from "@/lib/context/TransactionsContext";
 import { PageHeader } from "@/components/shared/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,15 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { cn } from "@/lib/utils";
 
 // UUID generator
 function generateId(): string {
@@ -37,19 +27,18 @@ function generateId(): string {
 }
 
 export default function SandboxPage() {
-  const { getFilteredAccounts } = useAccounts();
+  const { state: accountsState } = useAccounts();
   const { dispatch } = useTransactions();
 
   const [selectedAccountId, setSelectedAccountId] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
   const [externalReference, setExternalReference] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
 
   // Get open accounts only
   const openAccounts = useMemo(() => {
-    return getFilteredAccounts().filter((acc) => acc.status === "open");
-  }, [getFilteredAccounts]);
+    return accountsState.accounts.filter((acc) => acc.status === "open");
+  }, [accountsState.accounts]);
 
   const selectedAccount = useMemo(() => {
     return openAccounts.find((acc) => acc.id === selectedAccountId);
@@ -59,11 +48,13 @@ export default function SandboxPage() {
     e.preventDefault();
 
     if (!selectedAccountId || !amount) {
+      toast.error("Please fill in all required fields");
       return;
     }
 
     const parsedAmount = parseFloat(amount);
     if (isNaN(parsedAmount) || parsedAmount <= 0) {
+      toast.error("Please enter a valid amount");
       return;
     }
 
@@ -120,7 +111,7 @@ export default function SandboxPage() {
       />
 
       {/* Sandbox Banner */}
-      <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 mb-6 flex items-center gap-2">
+      <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 flex items-center gap-2">
         <FlaskConical className="h-5 w-5 text-amber-600 shrink-0" />
         <p className="text-sm text-amber-800 dark:text-amber-200">
           You are in sandbox mode. Payments simulated here do not affect real balances.
@@ -136,23 +127,25 @@ export default function SandboxPage() {
             <Select
               value={selectedAccountId}
               onValueChange={(value) => setSelectedAccountId(value)}
-              open={searchOpen}
-              onOpenChange={setSearchOpen}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select an account" />
               </SelectTrigger>
               <SelectContent>
-                <div className="p-2">
-                  <CommandLoop
-                    accounts={openAccounts}
-                    onSelect={(id) => {
-                      setSelectedAccountId(id);
-                      setSearchOpen(false);
-                    }}
-                    selectedId={selectedAccountId}
-                  />
-                </div>
+                {openAccounts.length === 0 ? (
+                  <div className="p-2 text-sm text-muted-foreground">No open accounts</div>
+                ) : (
+                  openAccounts.map((account) => (
+                    <SelectItem key={account.id} value={account.id}>
+                      <div className="flex flex-col">
+                        <span className="font-semibold">{account.name}</span>
+                        <span className="text-xs text-muted-foreground">
+                          Balance: {account.currency} {account.availableBalance.toLocaleString()}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))
+                )}
               </SelectContent>
             </Select>
             {selectedAccount && (
@@ -214,62 +207,5 @@ export default function SandboxPage() {
         </form>
       </Card>
     </div>
-  );
-}
-
-// Command loop component for searchable dropdown
-function CommandLoop({
-  accounts,
-  onSelect,
-  selectedId,
-}: {
-  accounts: any[];
-  onSelect: (id: string) => void;
-  selectedId: string;
-}) {
-  const [search, setSearch] = useState("");
-
-  const filtered = useMemo(() => {
-    if (!search.trim()) return accounts;
-    const query = search.toLowerCase();
-    return accounts.filter(
-      (acc) =>
-        acc.name.toLowerCase().includes(query) ||
-        acc.externalId?.toLowerCase().includes(query)
-    );
-  }, [accounts, search]);
-
-  return (
-    <>
-      <CommandInput
-        placeholder="Search accounts..."
-        value={search}
-        onValueChange={setSearch}
-        className="mb-2"
-      />
-      <CommandList className="max-h-[200px] overflow-auto">
-        <CommandEmpty>No accounts found.</CommandEmpty>
-        <CommandGroup>
-          {filtered.map((account) => (
-            <CommandItem
-              key={account.id}
-              value={account.id}
-              onSelect={() => onSelect(account.id)}
-              className={cn(
-                "cursor-pointer",
-                selectedId === account.id && "bg-accent"
-              )}
-            >
-              <div className="flex flex-col">
-                <span className="font-semibold">{account.name}</span>
-                <span className="text-xs text-muted-foreground">
-                  Balance: {account.currency} {account.availableBalance.toLocaleString()}
-                </span>
-              </div>
-            </CommandItem>
-          ))}
-        </CommandGroup>
-      </CommandList>
-    </>
   );
 }
