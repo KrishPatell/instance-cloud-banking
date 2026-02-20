@@ -1,0 +1,43 @@
+export const mockAccounts = [
+  {
+    id: "acc_01",
+    name: "USD Primary Account",
+    externalId: "ext_usd_001",
+    status: "open",
+    currency: "USD",
+    availableBalance: 76000.0,
+    currentBalance: 76000.0,
+    isPrimary: true,
+    wireAccountNumber: "123456789",
+    routingNumber: "021000021",
+    accountOwner: "Tom Trading",
+  },
+  {
+    id: "acc_02",
+    name: "AED Operating Account",
+    externalId: "ext_aed_001",
+    status: "open",
+    currency: "AED",
+    availableBalance: 250000.0,
+    currentBalance: 252500.0,
+    isPrimary: false,
+    wireAccountNumber: "987654321",
+    routingNumber: "031201360",
+    accountOwner: "Tom Trading",
+  },
+  {
+    id: "acc_03",
+    name: "USD Reserve Account",
+    externalId: "ext_usd_002",
+    status: "pending",
+    currency: "USD",
+    availableBalance: 0,
+    currentBalance: 0,
+    isPrimary: false,
+    wireAccountNumber: "",
+    routingNumber: "",
+    accountOwner: "Tom Trading",
+  },
+];
+
+export type Account = typeof mockAccounts[number];
