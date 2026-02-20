@@ -24,6 +24,8 @@ import {
   HelpCircle,
   ArrowRight,
   FileText,
+  FlaskConical,
+  Layers,
 } from "lucide-react";
 
 interface AppShellProps {
@@ -156,6 +158,18 @@ export function AppShell({ children }: AppShellProps) {
             <CommandItem onSelect={() => runCommand(() => router.push("/accounts/create"))}>
               <FileText className="mr-2 h-4 w-4" />
               <span>Create Account</span>
+            </CommandItem>
+            <CommandItem onSelect={() => runCommand(() => router.push("/sandbox"))}>
+              <FlaskConical className="mr-2 h-4 w-4" />
+              <span>Sandbox</span>
+            </CommandItem>
+            <CommandItem onSelect={() => runCommand(() => router.push("/statements"))}>
+              <FileText className="mr-2 h-4 w-4" />
+              <span>Statements</span>
+            </CommandItem>
+            <CommandItem onSelect={() => runCommand(() => router.push("/batch-payments"))}>
+              <Layers className="mr-2 h-4 w-4" />
+              <span>Batch Payments</span>
             </CommandItem>
           </CommandGroup>
         </CommandList>
