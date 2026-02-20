@@ -49,7 +49,7 @@ export default function AccountsPage() {
           </div>
           <div>
             <p className="font-medium">{row.name}</p>
-            <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>
+            <p className="text-sm text-muted-foreground">
               {row.externalId}
             </p>
           </div>
@@ -102,7 +102,7 @@ export default function AccountsPage() {
             Primary
           </span>
         ) : (
-          <span style={{ color: "hsl(var(--muted-foreground))" }}>-</span>
+          <span className="text-muted-foreground">-</span>
         ),
     },
     {
@@ -129,8 +129,8 @@ export default function AccountsPage() {
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight">Accounts</h1>
-            <p style={{ color: "hsl(var(--muted-foreground))" }}>
+            <h1 className="text-xl font-semibold">Accounts</h1>
+            <p className="text-muted-foreground">
               Manage your business accounts and balances.
             </p>
           </div>
@@ -147,38 +147,38 @@ export default function AccountsPage() {
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Balance</CardTitle>
-            <Wallet className="h-4 w-4" style={{ color: "hsl(var(--muted-foreground))" }} />
+            <CardTitle className="text-sm font-semibold">Total Balance</CardTitle>
+            <Wallet className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
               ${totalBalance.toLocaleString("en-US", { minimumFractionDigits: 2 })}
             </div>
-            <p className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>
+            <p className="text-xs text-muted-foreground">
               Across {state.accounts.length} accounts
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Open Accounts</CardTitle>
-            <Building2 className="h-4 w-4" style={{ color: "hsl(var(--muted-foreground))" }} />
+            <CardTitle className="text-sm font-semibold">Open Accounts</CardTitle>
+            <Building2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{openAccounts}</div>
-            <p className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>
+            <p className="text-xs text-muted-foreground">
               Active accounts
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Accounts</CardTitle>
-            <Building2 className="h-4 w-4" style={{ color: "hsl(var(--muted-foreground))" }} />
+            <CardTitle className="text-sm font-semibold">Pending Accounts</CardTitle>
+            <Building2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{pendingAccounts}</div>
-            <p className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>
+            <p className="text-xs text-muted-foreground">
               Awaiting activation
             </p>
           </CardContent>
@@ -199,7 +199,7 @@ export default function AccountsPage() {
         </Tabs>
         <div className="flex items-center gap-2">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" style={{ color: "hsl(var(--muted-foreground))" }} />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Search accounts..."
               value={state.searchQuery}
