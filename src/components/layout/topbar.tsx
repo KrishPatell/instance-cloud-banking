@@ -45,21 +45,23 @@ interface TopbarProps {
   onSearchClick?: () => void;
 }
 
-// Breadcrumb mapping
-const breadcrumbMap: Record<string, { label: string; href: string }[]> = {
-  "/": [{ label: "Home", href: "/" }, { label: "Overview", href: "/" }],
-  "/accounts": [{ label: "Home", href: "/" }, { label: "Accounts", href: "/accounts" }],
-  "/accounts/[id]": [{ label: "Home", href: "/" }, { label: "Accounts", href: "/accounts" }, { label: "Account Details", href: "" }],
-  "/payments": [{ label: "Home", href: "/" }, { label: "Payments", href: "/payments" }],
-  "/payments/[id]": [{ label: "Home", href: "/" }, { label: "Payments", href: "/payments" }, { label: "Payment Details", href: "" }],
-  "/transactions": [{ label: "Home", href: "/" }, { label: "Transactions", href: "/transactions" }],
-  "/cards": [{ label: "Home", href: "/" }, { label: "Cards", href: "/cards" }],
-  "/clients": [{ label: "Home", href: "/" }, { label: "Clients", href: "/clients" }],
-  "/settings": [{ label: "Home", href: "/" }, { label: "Settings", href: "/settings" }],
-  "/help": [{ label: "Home", href: "/" }, { label: "Help", href: "/help" }],
-  "/sandbox": [{ label: "Home", href: "/" }, { label: "Sandbox", href: "/sandbox" }],
-  "/statements": [{ label: "Home", href: "/" }, { label: "Statements", href: "/statements" }],
-  "/batch-payments": [{ label: "Home", href: "/" }, { label: "Batch Payments", href: "/batch-payments" }],
+// Page labels for breadcrumbs
+const pageLabels: Record<string, string> = {
+  "/": "Overview",
+  "/accounts": "Accounts",
+  "/payments": "Payments",
+  "/transactions": "Transactions",
+  "/cards": "Cards",
+  "/clients": "Clients",
+  "/settings": "Settings",
+  "/help": "Help",
+  "/sandbox": "Sandbox",
+  "/statements": "Statements",
+  "/batch-payments": "Batch Payments",
+  "/payments/create": "Create Payment",
+  "/accounts/create": "Create Account",
+  "/transfers/create": "Create Transfer",
+  "/exchange/create": "Create Exchange",
 };
 
 // Quick create items with keyboard shortcuts
@@ -84,17 +86,32 @@ export function Topbar({ onMenuClick, sidebarCollapsed = false, onSearchClick }:
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
 
-  // Get breadcrumbs for current path
+  // Get breadcrumbs for current path - simplified to just 2 items
   const getBreadcrumbs = () => {
-    if (breadcrumbMap[pathname]) {
-      return breadcrumbMap[pathname];
+    // Check exact match first
+    if (pageLabels[pathname]) {
+      return [
+        { label: "Home", href: "/" },
+        { label: pageLabels[pathname], href: pathname }
+      ];
     }
-    for (const [path, crumbs] of Object.entries(breadcrumbMap)) {
-      if (pathname.startsWith(path.replace("[id]", ""))) {
-        return crumbs;
+    // Check for dynamic routes like /accounts/[id]
+    for (const [path, label] of Object.entries(pageLabels)) {
+      if (path.includes("[id]")) {
+        const basePath = path.replace("[id]", "");
+        if (pathname.startsWith(basePath) && pathname !== basePath) {
+          return [
+            { label: "Home", href: "/" },
+            { label: pageLabels[basePath] || "Page", href: basePath }
+          ];
+        }
       }
     }
-    return [{ label: "Home", href: "/" }, { label: "Page", href: pathname }];
+    // Default
+    return [
+      { label: "Home", href: "/" },
+      { label: "Overview", href: "/" }
+    ];
   };
 
   const breadcrumbs = getBreadcrumbs();
@@ -123,17 +140,7 @@ export function Topbar({ onMenuClick, sidebarCollapsed = false, onSearchClick }:
             <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
               Home
             </Link>
-            {breadcrumbs.slice(0, -1).map((crumb, idx) => (
-              <React.Fragment key={crumb.href}>
-                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-                <Link href={crumb.href} className="text-muted-foreground hover:text-foreground transition-colors">
-                  {crumb.label}
-                </Link>
-              </React.Fragment>
-            ))}
-            {breadcrumbs.length > 1 && (
-              <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-            )}
+            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
             <span className="font-semibold text-foreground">{currentPage.label}</span>
           </div>
           <p className="text-xs text-muted-foreground mt-0.5">
