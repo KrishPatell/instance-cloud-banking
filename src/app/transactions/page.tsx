@@ -374,7 +374,7 @@ export default function TransactionsPage() {
               {paginatedTransactions.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={8} className="h-32 text-center">
-                    <p style={{ color: "hsl(var(--muted-foreground))" }}>
+                    <p className="text-muted-foreground">
                       No transactions found
                     </p>
                   </TableCell>
