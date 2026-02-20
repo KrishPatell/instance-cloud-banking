@@ -11,18 +11,12 @@ import {
   Moon,
   Menu,
   Plus,
-  ChevronDown,
-  Keyboard,
-  Compass,
-  RefreshCw,
   ChevronRight,
   Home,
   User,
   Settings,
   LogOut,
-  Ticket,
-  Users,
-  FileText,
+  Keyboard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -64,141 +58,98 @@ const pageLabels: Record<string, string> = {
   "/exchange/create": "Create Exchange",
 };
 
-// Quick create items with keyboard shortcuts
-const quickCreateItems = [
-  { label: "New Payment", href: "/payments/create", icon: Plus, shortcut: "⌘N" },
-  { label: "New Account", href: "/accounts/create", icon: Users, shortcut: "⌘⇧A" },
-  { label: "New Client", href: "/clients", icon: User, shortcut: "⌘⇧C" },
-  { label: "New Invoice", href: "/invoices/create", icon: FileText, shortcut: "⌘I" },
-  { label: "Sandbox Test", href: "/sandbox", icon: RefreshCw, shortcut: "⌘S" },
-];
-
-// Notifications
-const notifications = [
-  { id: 1, title: "Payment Received", message: "ABC Corp sent £5,234.50", time: "2m ago", type: "success", unread: true },
-  { id: 2, title: "Account Verified", message: "Your account has been verified", time: "1h ago", type: "info", unread: true },
-  { id: 3, title: "Batch Complete", message: "15 payments processed", time: "3h ago", type: "success", unread: false },
-  { id: 4, title: "Security Alert", message: "New login from Chrome", time: "5h ago", type: "warning", unread: false },
-];
-
 export function Topbar({ onMenuClick, sidebarCollapsed = false, onSearchClick }: TopbarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
 
   // Get breadcrumbs for current path - simplified to just 2 items
-  const getBreadcrumbs = () => {
+  const getCurrentPage = () => {
     // Check exact match first
     if (pageLabels[pathname]) {
-      return [
-        { label: "Home", href: "/" },
-        { label: pageLabels[pathname], href: pathname }
-      ];
+      return pageLabels[pathname];
     }
     // Check for dynamic routes like /accounts/[id]
     for (const [path, label] of Object.entries(pageLabels)) {
       if (path.includes("[id]")) {
         const basePath = path.replace("[id]", "");
         if (pathname.startsWith(basePath) && pathname !== basePath) {
-          return [
-            { label: "Home", href: "/" },
-            { label: pageLabels[basePath] || "Page", href: basePath }
-          ];
+          return pageLabels[basePath] || "Page";
         }
       }
     }
-    // Default
-    return [
-      { label: "Home", href: "/" },
-      { label: "Overview", href: "/" }
-    ];
+    return "Overview";
   };
 
-  const breadcrumbs = getBreadcrumbs();
-  const currentPage = breadcrumbs[breadcrumbs.length - 1];
-  const unreadCount = notifications.filter(n => n.unread).length;
-
-  const handleCommandSelect = (href: string) => {
-    router.push(href);
-  };
+  const currentPage = getCurrentPage();
 
   const sidebarWidth = sidebarCollapsed ? "64px" : "240px";
 
   return (
     <>
       <header
-        className="fixed right-0 top-0 z-30 flex h-16 items-center justify-between border-b bg-white/95 backdrop-blur-sm px-4 pl-16 lg:px-6"
+        className="fixed right-0 top-0 z-30 flex h-14 items-center justify-between border-b bg-white px-4 pl-16 lg:px-6"
         style={{
-          borderColor: "hsl(var(--border))",
+          borderColor: "#e5e7eb",
           left: sidebarWidth,
-          transition: "left 300ms ease-in-out",
+          transition: "left 200ms ease-in-out",
         }}
       >
         {/* Left Section - Breadcrumbs */}
-        <div className="flex flex-col">
-          <div className="flex items-center gap-1.5 text-sm">
-            <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
-              Home
-            </Link>
-            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-            <span className="font-semibold text-foreground">{currentPage.label}</span>
-          </div>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            February 2026 · All clouds
-          </p>
+        <div className="flex items-center gap-2 text-sm">
+          <Link href="/" className="text-gray-500 hover:text-gray-900 transition-colors">
+            Home
+          </Link>
+          <ChevronRight className="h-4 w-4 text-gray-400" />
+          <span className="font-medium text-gray-900">{currentPage}</span>
         </div>
 
         {/* Right Section */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           {/* Quick Create Button */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button 
-                variant="ghost" 
-                size="sm" 
-                className="gap-2 h-9 px-3 bg-slate-900 hover:bg-slate-800 text-white rounded-lg"
+                className="gap-2 h-9 px-3 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-sm font-medium"
               >
                 <Plus className="h-4 w-4" />
                 <span className="hidden sm:inline">Create</span>
-                <ChevronDown className="h-3 w-3 opacity-70" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 p-1">
-              <DropdownMenuLabel className="text-xs text-muted-foreground font-normal">Quick Create</DropdownMenuLabel>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem onClick={() => router.push("/payments/create")}>
+                <Plus className="mr-2 h-4 w-4" />
+                New Payment
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/accounts/create")}>
+                <Plus className="mr-2 h-4 w-4" />
+                New Account
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/clients")}>
+                <Plus className="mr-2 h-4 w-4" />
+                New Client
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              {quickCreateItems.map((item) => (
-                <DropdownMenuItem 
-                  key={item.href} 
-                  onClick={() => handleCommandSelect(item.href)}
-                  className="flex items-center justify-between cursor-pointer"
-                >
-                  <div className="flex items-center gap-2">
-                    <item.icon className="h-4 w-4 text-muted-foreground" />
-                    <span>{item.label}</span>
-                  </div>
-                  <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-                    {item.shortcut}
-                  </kbd>
-                </DropdownMenuItem>
-              ))}
+              <DropdownMenuItem onClick={() => router.push("/sandbox")}>
+                <Plus className="mr-2 h-4 w-4" />
+                Sandbox Test
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Search Bar */}
+          {/* Search */}
           <div 
-            className="relative hidden lg:block"
+            className="hidden lg:flex items-center gap-2 h-9 px-3 rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer min-w-[180px]"
             onClick={onSearchClick}
           >
-            <div className="flex items-center gap-2 h-9 px-3 rounded-lg border bg-muted/50 hover:bg-muted transition-colors cursor-pointer min-w-[200px]">
-              <Search className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground flex-1">Search...</span>
-              <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-white px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-                <span className="text-xs">⌘</span>K
-              </kbd>
-            </div>
+            <Search className="h-4 w-4 text-gray-400" />
+            <span className="text-sm text-gray-400 flex-1">Search...</span>
+            <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-white px-1.5 font-mono text-[10px] font-medium text-gray-400">
+              <span className="text-xs">⌘</span>K
+            </kbd>
           </div>
 
-          {/* Keyboard Shortcuts Help */}
+          {/* Keyboard Shortcuts */}
           <Tooltip>
             <TooltipTrigger asChild>
               <Button 
@@ -207,15 +158,13 @@ export function Topbar({ onMenuClick, sidebarCollapsed = false, onSearchClick }:
                 className="h-9 w-9 rounded-lg"
                 onClick={onSearchClick}
               >
-                <Keyboard className="h-4 w-4" />
+                <Keyboard className="h-4 w-4 text-gray-500" />
               </Button>
             </TooltipTrigger>
             <TooltipContent side="bottom" className="p-2">
               <div className="text-xs space-y-1">
                 <p><kbd className="font-mono">⌘K</kbd> Search</p>
                 <p><kbd className="font-mono">⌘B</kbd> Toggle sidebar</p>
-                <p><kbd className="font-mono">⌘N</kbd> Quick create</p>
-                <p><kbd className="font-mono">⌘/</kbd> All shortcuts</p>
               </div>
             </TooltipContent>
           </Tooltip>
@@ -228,38 +177,35 @@ export function Topbar({ onMenuClick, sidebarCollapsed = false, onSearchClick }:
                 size="icon" 
                 className="relative h-9 w-9 rounded-lg"
               >
-                <Bell className="h-4 w-4" />
-                {unreadCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
-                    {unreadCount}
-                  </span>
-                )}
+                <Bell className="h-4 w-4 text-gray-500" />
+                <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                  3
+                </span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80 p-0">
+            <DropdownMenuContent align="end" className="w-72">
               <div className="flex items-center justify-between p-3 border-b">
                 <span className="font-semibold">Notifications</span>
-                <Badge variant="secondary" className="text-xs">{unreadCount} new</Badge>
+                <Badge variant="secondary" className="text-xs">3 new</Badge>
               </div>
-              <div className="max-h-[300px] overflow-y-auto">
-                {notifications.map((notif) => (
-                  <DropdownMenuItem 
-                    key={notif.id} 
-                    className={cn(
-                      "flex flex-col items-start gap-1 p-3 cursor-pointer",
-                      notif.unread && "bg-blue-50/50 dark:bg-blue-950/30"
-                    )}
-                  >
-                    <div className="flex justify-between w-full">
-                      <span className="font-medium text-sm">{notif.title}</span>
-                      <span className="text-xs text-muted-foreground">{notif.time}</span>
-                    </div>
-                    <span className="text-xs text-muted-foreground">{notif.message}</span>
-                  </DropdownMenuItem>
-                ))}
+              <div className="py-2">
+                <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 cursor-pointer">
+                  <div className="flex justify-between w-full">
+                    <span className="font-medium text-sm">Payment Received</span>
+                    <span className="text-xs text-gray-400">2m ago</span>
+                  </div>
+                  <span className="text-xs text-gray-500">ABC Corp sent £5,234.50</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 cursor-pointer">
+                  <div className="flex justify-between w-full">
+                    <span className="font-medium text-sm">Account Verified</span>
+                    <span className="text-xs text-gray-400">1h ago</span>
+                  </div>
+                  <span className="text-xs text-gray-500">Your account has been verified</span>
+                </DropdownMenuItem>
               </div>
               <div className="p-2 border-t">
-                <Button variant="ghost" size="sm" className="w-full justify-center text-sm text-muted-foreground">
+                <Button variant="ghost" size="sm" className="w-full justify-center text-sm text-gray-500">
                   View all notifications
                 </Button>
               </div>
@@ -276,9 +222,9 @@ export function Topbar({ onMenuClick, sidebarCollapsed = false, onSearchClick }:
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               >
                 {theme === "dark" ? (
-                  <Sun className="h-4 w-4" />
+                  <Sun className="h-4 w-4 text-gray-500" />
                 ) : (
-                  <Moon className="h-4 w-4" />
+                  <Moon className="h-4 w-4 text-gray-500" />
                 )}
               </Button>
             </TooltipTrigger>
@@ -288,24 +234,24 @@ export function Topbar({ onMenuClick, sidebarCollapsed = false, onSearchClick }:
           </Tooltip>
 
           {/* Divider */}
-          <div className="h-6 w-px bg-border mx-1" />
+          <div className="h-6 w-px bg-gray-200 mx-1" />
 
           {/* User Avatar */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="gap-2 h-9 px-2 rounded-lg hover:bg-muted">
+              <Button variant="ghost" className="gap-2 h-9 px-2 rounded-lg hover:bg-gray-100">
                 <Avatar className="h-7 w-7">
                   <AvatarImage src="" alt="User" />
-                  <AvatarFallback className="bg-slate-900 text-white text-xs">KP</AvatarFallback>
+                  <AvatarFallback className="bg-gray-900 text-white text-xs">KP</AvatarFallback>
                 </Avatar>
-                <span className="hidden md:inline text-sm font-medium text-gray-700 dark:text-gray-200">Krish</span>
+                <span className="hidden md:inline text-sm font-medium text-gray-700">Krish</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48 p-1">
+            <DropdownMenuContent align="end" className="w-48">
               <DropdownMenuLabel>
                 <div className="flex flex-col">
                   <span>Krish Patel</span>
-                  <span className="text-xs font-normal text-muted-foreground">krish@stvble.com</span>
+                  <span className="text-xs font-normal text-gray-500">krish@stvble.com</span>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
