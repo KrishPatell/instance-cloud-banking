@@ -5,7 +5,7 @@ export default function CardsPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
         <h1 className="text-xl font-semibold">Cards</h1>
-        <p style={{ color: "var(--muted-foreground)" }}>
+        <p className="text-sm text-muted-foreground">
           Manage corporate cards and spending limits.
         </p>
       </div>
@@ -15,7 +15,7 @@ export default function CardsPage() {
           <CardTitle>Corporate Cards</CardTitle>
         </CardHeader>
         <CardContent>
-          <p style={{ color: "var(--muted-foreground)" }}>
+          <p className="text-sm text-muted-foreground">
             Card management coming soon...
           </p>
         </CardContent>

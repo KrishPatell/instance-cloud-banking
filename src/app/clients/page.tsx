@@ -5,7 +5,7 @@ export default function ClientsPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
         <h1 className="text-xl font-semibold">Clients</h1>
-        <p style={{ color: "var(--muted-foreground)" }}>
+        <p className="text-sm text-muted-foreground">
           Manage client accounts and KYC verification.
         </p>
       </div>
@@ -15,7 +15,7 @@ export default function ClientsPage() {
           <CardTitle>Client Directory</CardTitle>
         </CardHeader>
         <CardContent>
-          <p style={{ color: "var(--muted-foreground)" }}>
+          <p className="text-sm text-muted-foreground">
             Client management coming soon...
           </p>
         </CardContent>

@@ -5,7 +5,7 @@ export default function HelpPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
         <h1 className="text-xl font-semibold">Help & Support</h1>
-        <p style={{ color: "var(--muted-foreground)" }}>
+        <p className="text-sm text-muted-foreground">
           Get help and access documentation.
         </p>
       </div>
@@ -15,7 +15,7 @@ export default function HelpPage() {
           <CardTitle>Support Center</CardTitle>
         </CardHeader>
         <CardContent>
-          <p style={{ color: "var(--muted-foreground)" }}>
+          <p className="text-sm text-muted-foreground">
             Help center coming soon...
           </p>
         </CardContent>
