@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, Suspense } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { FileText, Table, Loader2, Info } from "lucide-react";
@@ -17,9 +19,12 @@ import { RecentDownloadsSection } from "@/components/statements/RecentDownloadsS
 
 import { useAccounts } from "@/lib/context/AccountsContext";
 import {
+  balanceHistorySchema,
+  transactionsStatementSchema,
+  accountStatementSchema,
   statementTabSchema,
 } from "@/lib/validation/statements";
-import type { StatementDownload } from "@/types/statements";
+import type { StatementDownload, BalanceHistoryFormData, TransactionsStatementFormData, AccountStatementFormData } from "@/types/statements";
 import { format } from "date-fns";
 
 const months = [
