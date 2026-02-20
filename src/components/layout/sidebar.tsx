@@ -199,7 +199,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                           variant="ghost"
                           className={cn(
                             "flex h-10 w-10 items-center justify-center rounded-md",
-                            itemActive && "bg-primary/10 text-primary"
+                            itemActive && "bg-primary/10 text-white"
                           )}
                           style={{
                             color: itemActive ? "hsl(var(--primary))" : "#94a3b8",
@@ -220,7 +220,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                       className={cn(
                         "flex h-10 w-full items-center justify-between rounded-md px-3 text-sm font-medium",
                         "hover:bg-white/5 hover:text-white",
-                        itemActive && "bg-primary/10 text-primary"
+                        itemActive && "bg-primary/10 text-white"
                       )}
                       style={{
                         color: itemActive ? "hsl(var(--primary))" : "#94a3b8",
@@ -248,7 +248,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                               className={cn(
                                 "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                                 "hover:bg-white/5 hover:text-white",
-                                childActive && "bg-primary/10 text-primary"
+                                childActive && "bg-primary/10 text-white"
                               )}
                               style={{
                                 color: childActive ? "hsl(var(--primary))" : "#94a3b8",
@@ -303,7 +303,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                   className={cn(
                     "flex h-10 items-center gap-3 rounded-md px-3 text-sm font-medium transition-colors",
                     "hover:bg-white/5 hover:text-white",
-                    itemActive && "bg-primary/10 text-primary border-l-2 border-primary"
+                    itemActive && "bg-primary/10 text-white border-l-2 border-white"
                   )}
                   style={{
                     color: itemActive ? "hsl(var(--primary))" : "#94a3b8",
