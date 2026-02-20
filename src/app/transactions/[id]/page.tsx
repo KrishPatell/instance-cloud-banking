@@ -49,7 +49,7 @@ export default function TransactionDetailPage({ params }: TransactionPageProps) 
     return (
       <div className="container mx-auto py-8">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Transaction Not Found</h1>
+          <h1 className="text-xl font-semibold mb-4">Transaction Not Found</h1>
           <Button onClick={() => router.push("/transactions")}>
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Transactions
@@ -112,7 +112,7 @@ export default function TransactionDetailPage({ params }: TransactionPageProps) 
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
-            <h1 className="text-2xl font-bold">Transaction {transaction.reference.slice(0, 12)}...</h1>
+            <h1 className="text-xl font-semibold">Transaction {transaction.reference.slice(0, 12)}...</h1>
             <p className="text-muted-foreground">Transactions / Transaction</p>
           </div>
         </div>
