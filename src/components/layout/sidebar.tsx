@@ -173,7 +173,7 @@ export function Sidebar({ collapsed: initialCollapsed = false, onToggle }: Sideb
                 isExpanded ? "opacity-100 w-auto" : "opacity-0 w-0"
               )}
             >
-              STVBLE
+              Dashboard
             </span>
           </Link>
         </div>
