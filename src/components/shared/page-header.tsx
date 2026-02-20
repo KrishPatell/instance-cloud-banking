@@ -20,8 +20,7 @@ export function PageHeader({ title, subtitle, actions, breadcrumb, icon: Icon }:
       {breadcrumb && (
         <Link 
           href={breadcrumb.href}
-          className="flex items-center gap-1 text-sm mb-2 hover:underline"
-          style={{ color: "hsl(var(--muted-foreground))" }}
+          className="flex items-center gap-1 text-sm mb-2 hover:underline text-muted-foreground"
         >
           <ChevronLeft className="h-3 w-3" />
           {breadcrumb.label}
@@ -31,19 +30,17 @@ export function PageHeader({ title, subtitle, actions, breadcrumb, icon: Icon }:
         <div className="flex items-center gap-3">
           {Icon && (
             <div 
-              className="h-10 w-10 rounded-lg flex items-center justify-center"
-              style={{ backgroundColor: "hsl(var(--primary) / 0.1)" }}
+              className="h-10 w-10 rounded-lg flex items-center justify-center bg-primary/10"
             >
               <Icon 
-                className="h-5 w-5" 
-                style={{ color: "hsl(var(--primary))" }} 
+                className="h-5 w-5 text-primary" 
               />
             </div>
           )}
           <div>
             <h1 className="text-xl font-semibold text-foreground">{title}</h1>
             {subtitle && (
-              <p className="text-sm mt-0.5" style={{ color: "hsl(var(--muted-foreground))" }}>
+              <p className="text-sm mt-0.5 text-muted-foreground">
                 {subtitle}
               </p>
             )}

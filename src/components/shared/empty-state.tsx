@@ -23,19 +23,16 @@ export function EmptyState({
   return (
     <div className={cn("flex flex-col items-center justify-center py-16", className)}>
       <div 
-        className="h-12 w-12 rounded-full flex items-center justify-center mb-4"
-        style={{ backgroundColor: "hsl(var(--muted-foreground) / 0.1)" }}
+        className="h-12 w-12 rounded-full flex items-center justify-center mb-4 bg-muted"
       >
         <Icon 
-          className="h-6 w-6" 
-          style={{ color: "hsl(var(--muted-foreground) / 0.3)" }} 
+          className="h-6 w-6 text-muted-foreground" 
         />
       </div>
       <p className="text-sm font-medium text-foreground">{title}</p>
       {description && (
         <p 
-          className="text-sm mt-1 text-center" 
-          style={{ color: "hsl(var(--muted-foreground))" }}
+          className="text-sm mt-1 text-center text-muted-foreground" 
         >
           {description}
         </p>

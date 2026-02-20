@@ -73,8 +73,7 @@ export function DataTable<T extends Record<string, unknown>>({
               {columns.map((col) => (
                 <TableHead 
                   key={col.key} 
-                  className={cn("text-xs uppercase tracking-wider font-medium", col.className)}
-                  style={{ color: "hsl(var(--muted-foreground))" }}
+                  className={cn("text-xs uppercase tracking-wider font-medium text-muted-foreground", col.className)}
                 >
                   {col.header}
                 </TableHead>
@@ -104,8 +103,7 @@ export function DataTable<T extends Record<string, unknown>>({
             {columns.map((col) => (
               <TableHead 
                 key={col.key} 
-                className={cn("text-xs uppercase tracking-wider font-medium", col.className)}
-                style={{ color: "hsl(var(--muted-foreground))" }}
+                className={cn("text-xs uppercase tracking-wider font-medium text-muted-foreground", col.className)}
               >
                 {col.header}
               </TableHead>
@@ -140,7 +138,7 @@ export function DataTable<T extends Record<string, unknown>>({
       {/* Pagination */}
       {pagination && totalPages > 1 && (
         <div className="flex items-center justify-between px-4 py-3 border-t">
-          <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>
+          <p className="text-sm text-muted-foreground">
             Page {page} of {totalPages}
           </p>
           <div className="flex items-center gap-2">
