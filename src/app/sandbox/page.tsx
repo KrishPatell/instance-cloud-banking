@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
-import { FlaskConical, CheckCircle2, Loader2, Plus, Trash2, History, ArrowUpRight, ArrowDownLeft, RefreshCw, CreditCard, Building2 } from "lucide-react";
+import { FlaskConical, CheckCircle2, Loader2, Plus, Trash2, History, ArrowUpRight, ArrowDownLeft, RefreshCw, CreditCard, Building2, Zap } from "lucide-react";
 import { useAccounts } from "@/lib/context/AccountsContext";
 import { useTransactions } from "@/lib/context/TransactionsContext";
 import { PageHeader } from "@/components/shared/page-header";
@@ -126,6 +126,7 @@ function SimulatePaymentTab({ accounts, onSimulate }: { accounts: any[], onSimul
   const [status, setStatus] = useState<"settled" | "pending" | "failed">("settled");
   const [description, setDescription] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [rapidCount, setRapidCount] = useState<string>("10");
 
   const selectedAccount = accounts.find((acc) => acc.id === selectedAccountId);
 
@@ -171,6 +172,55 @@ function SimulatePaymentTab({ accounts, onSimulate }: { accounts: any[], onSimul
     setAmount("");
     setExternalReference("");
     setDescription("");
+    setIsSubmitting(false);
+  };
+
+  // Rapid fire - generate multiple inbound payments at once
+  const handleRapidFire = async () => {
+    if (!selectedAccountId) {
+      toast.error("Please select an account first");
+      return;
+    }
+    const count = parseInt(rapidCount) || 10;
+    if (count < 1 || count > 100) {
+      toast.error("Enter a number between 1 and 100");
+      return;
+    }
+
+    setIsSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const senders = ["ABC Corp", "XYZ Ltd", "Global Payments", "Tech Solutions", "Finance Hub"];
+    const banks = ["Chase", "Bank of America", "Wells Fargo", "Citi", "HSBC"];
+
+    for (let i = 0; i < count; i++) {
+      const sender = senders[Math.floor(Math.random() * senders.length)];
+      const txnAmount = Math.random() * 5000 + 100;
+      
+      const transaction = {
+        id: generateId(),
+        reference: generateReference("RF"),
+        externalId: generateId(),
+        type: "outbound" as const,
+        status: "settled" as const,
+        amount: txnAmount,
+        currency: selectedAccount!.currency,
+        direction: "inbound" as const,
+        fromAccountId: "sandbox",
+        toAccountId: selectedAccountId,
+        fromAccountName: sender,
+        toAccountName: selectedAccount!.name,
+        senderBank: banks[Math.floor(Math.random() * banks.length)],
+        description: `Rapid inbound payment ${i + 1}`,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        settledAt: new Date().toISOString(),
+        documents: [],
+      };
+      onSimulate(transaction);
+    }
+
+    toast.success(`Created ${count} rapid inbound payments!`);
     setIsSubmitting(false);
   };
 
@@ -289,6 +339,40 @@ function SimulatePaymentTab({ accounts, onSimulate }: { accounts: any[], onSimul
               {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Processing...</> : "Simulate Payment"}
             </Button>
           </form>
+        </CardContent>
+      </Card>
+
+      {/* Rapid Fire Inbound */}
+      <Card className="border-yellow-500/30 bg-yellow-500/5">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-yellow-700 dark:text-yellow-400">
+            <Zap className="h-4 w-4" />
+            Rapid Inbound
+          </CardTitle>
+          <CardDescription>Generate multiple inbound payments at once for testing</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex gap-2">
+            <Input
+              type="number"
+              min="1"
+              max="100"
+              value={rapidCount}
+              onChange={(e) => setRapidCount(e.target.value)}
+              placeholder="10"
+              className="max-w-[120px]"
+            />
+            <Button 
+              onClick={handleRapidFire} 
+              disabled={isSubmitting || !selectedAccountId}
+              variant="outline"
+              className="gap-2 border-yellow-500 text-yellow-700 hover:bg-yellow-500/10"
+            >
+              <Zap className="h-4 w-4" />
+              Generate
+            </Button>
+          </div>
+          <p className="text-xs text-muted-foreground">Generate 1-100 inbound payments with random senders</p>
         </CardContent>
       </Card>
 
