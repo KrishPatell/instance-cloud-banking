@@ -43,7 +43,7 @@ interface SidebarProps {
 const navItems = [
   {
     title: "Stivble",
-    href: "/stivble",
+    href: "/",
     icon: Building2,
     hasChevron: true,
   },
