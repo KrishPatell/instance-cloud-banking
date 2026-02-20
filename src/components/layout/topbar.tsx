@@ -1,29 +1,23 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
 import { useTheme } from "next-themes";
 import {
   Search,
   Bell,
-  HelpCircle,
   Sun,
   Moon,
   Menu,
-  Building2,
-  ArrowUpRight,
-  ArrowLeftRight,
-  RefreshCw,
-  FlaskConical,
-  Wallet,
-  ArrowUpDown,
-  FileText,
-  Users2,
-  Settings,
   Plus,
-  CreditCard,
-  Send,
-  ArrowRightLeft,
+  ChevronDown,
+  Keyboard,
+  Compass,
+  RefreshCw,
+  Download,
+  ChevronRight,
+  Home,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,7 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 interface TopbarProps {
   onMenuClick: () => void;
@@ -45,48 +39,47 @@ interface TopbarProps {
   onSearchClick?: () => void;
 }
 
-const navigationItems = [
-  { label: "Go to Accounts", href: "/accounts", icon: Wallet },
-  { label: "Go to Transactions", href: "/transactions", icon: ArrowUpDown },
-  { label: "Go to Customers", href: "/customers", icon: Users2 },
-  { label: "Go to Statements", href: "/statements", icon: FileText },
-  { label: "Go to Settings", href: "/settings", icon: Settings },
-];
-
-const actionItems = [
-  { label: "Create outbound payment", href: "/payments/create", icon: ArrowUpRight },
-  { label: "Create internal transfer", href: "/payments/create?tab=internal", icon: ArrowLeftRight },
-  { label: "Create currency exchange", href: "/payments/create?tab=exchange", icon: RefreshCw },
-  { label: "Simulate inbound payment", href: "/sandbox", icon: FlaskConical },
-];
+// Breadcrumb mapping
+const breadcrumbMap: Record<string, { label: string; href: string }[]> = {
+  "/": [{ label: "Home", href: "/" }, { label: "Overview", href: "/" }],
+  "/accounts": [{ label: "Home", href: "/" }, { label: "Accounts", href: "/accounts" }],
+  "/accounts/[id]": [{ label: "Home", href: "/" }, { label: "Accounts", href: "/accounts" }, { label: "Account Details", href: "" }],
+  "/payments": [{ label: "Home", href: "/" }, { label: "Payments", href: "/payments" }],
+  "/payments/[id]": [{ label: "Home", href: "/" }, { label: "Payments", href: "/payments" }, { label: "Payment Details", href: "" }],
+  "/transactions": [{ label: "Home", href: "/" }, { label: "Transactions", href: "/transactions" }],
+  "/cards": [{ label: "Home", href: "/" }, { label: "Cards", href: "/cards" }],
+  "/clients": [{ label: "Home", href: "/" }, { label: "Clients", href: "/clients" }],
+  "/settings": [{ label: "Home", href: "/" }, { label: "Settings", href: "/settings" }],
+  "/help": [{ label: "Home", href: "/" }, { label: "Help", href: "/help" }],
+  "/sandbox": [{ label: "Home", href: "/" }, { label: "Sandbox", href: "/sandbox" }],
+  "/batch-payments": [{ label: "Home", href: "/" }, { label: "Batch Payments", href: "/batch-payments" }],
+};
 
 export function Topbar({ onMenuClick, sidebarCollapsed = false, onSearchClick }: TopbarProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { theme, setTheme } = useTheme();
-  const [recentPages, setRecentPages] = React.useState<string[]>([]);
 
-  // Load recent pages from localStorage
-  React.useEffect(() => {
-    const stored = localStorage.getItem("recentPages");
-    if (stored) {
-      setRecentPages(JSON.parse(stored));
+  // Get breadcrumbs for current path
+  const getBreadcrumbs = () => {
+    // Check for exact match first
+    if (breadcrumbMap[pathname]) {
+      return breadcrumbMap[pathname];
     }
-  }, []);
-
-  // Save to recent pages
-  const addToRecent = (href: string) => {
-    const updated = [href, ...recentPages.filter(p => p !== href)].slice(0, 3);
-    setRecentPages(updated);
-    localStorage.setItem("recentPages", JSON.stringify(updated));
+    // Check for partial matches
+    for (const [path, crumbs] of Object.entries(breadcrumbMap)) {
+      if (pathname.startsWith(path.replace("[id]", ""))) {
+        return crumbs;
+      }
+    }
+    return [{ label: "Home", href: "/" }, { label: "Page", href: pathname }];
   };
+
+  const breadcrumbs = getBreadcrumbs();
+  const currentPage = breadcrumbs[breadcrumbs.length - 1];
 
   const handleCommandSelect = (href: string) => {
-    addToRecent(href);
     router.push(href);
-  };
-
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   const sidebarWidth = sidebarCollapsed ? "64px" : "240px";
@@ -94,202 +87,195 @@ export function Topbar({ onMenuClick, sidebarCollapsed = false, onSearchClick }:
   return (
     <>
       <header
-        className="fixed right-0 top-0 z-30 flex h-14 items-center justify-between border-b px-4 pl-16 lg:px-6"
+        className="fixed right-0 top-0 z-30 flex h-16 items-center justify-between border-b bg-white px-6"
         style={{
-          backgroundColor: "hsl(var(--background))",
           borderColor: "hsl(var(--border))",
           left: sidebarWidth,
           transition: "left 300ms ease-in-out",
         }}
       >
-        {/* Mobile menu button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="mr-2 lg:hidden"
-          onClick={onMenuClick}
-        >
-          <Menu className="h-5 w-5" />
-        </Button>
-
-        {/* Search with Cmd+K - triggers app-shell search */}
-        <div 
-          className="relative hidden flex-1 md:block md:max-w-xs lg:max-w-sm cursor-pointer"
-          onClick={onSearchClick}
-        >
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" style={{ color: "hsl(var(--muted-foreground))" }} />
-          <Input
-            placeholder="Search or type command..."
-            readOnly
-            className="cursor-pointer pl-9 pr-16"
-            style={{
-              backgroundColor: "hsl(var(--muted))",
-              borderColor: "transparent",
-            }}
-          />
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
-            <kbd
-              className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100"
-              style={{
-                backgroundColor: "hsl(var(--muted))",
-                color: "hsl(var(--muted-foreground))",
-                borderColor: "hsl(var(--border))",
-              }}
-            >
-              <span className="text-xs">⌘</span>K
-            </kbd>
+        {/* Left Section - Breadcrumbs */}
+        <div className="flex flex-col">
+          <div className="flex items-center gap-1.5 text-sm">
+            <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
+              Home
+            </Link>
+            {breadcrumbs.slice(0, -1).map((crumb, idx) => (
+              <React.Fragment key={crumb.href}>
+                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
+                <Link href={crumb.href} className="text-muted-foreground hover:text-foreground transition-colors">
+                  {crumb.label}
+                </Link>
+              </React.Fragment>
+            ))}
+            {breadcrumbs.length > 1 && (
+              <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
+            )}
+            <span className="font-semibold text-foreground">{currentPage.label}</span>
           </div>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            February 2026 · All clouds
+          </p>
         </div>
 
         {/* Right Section */}
         <div className="flex items-center gap-2">
-          {/* Quick Create Dropdown */}
+          {/* Quick Create Button */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="gap-2">
+              <Button className="gap-2 bg-slate-900 hover:bg-slate-800 text-white border-0">
                 <Plus className="h-4 w-4" />
-                <span className="hidden sm:inline">Create</span>
+                <span>Quick Create</span>
+                <ChevronDown className="h-3 w-3 opacity-70" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>Quick Create</DropdownMenuLabel>
-              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => handleCommandSelect("/payments/create")}>
-                <Send className="mr-2 h-4 w-4" />
+                <Plus className="mr-2 h-4 w-4" />
                 <span>Outbound Payment</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleCommandSelect("/payments/create?tab=internal")}>
-                <ArrowRightLeft className="mr-2 h-4 w-4" />
+                <Plus className="mr-2 h-4 w-4" />
                 <span>Internal Transfer</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleCommandSelect("/payments/create?tab=exchange")}>
-                <RefreshCw className="mr-2 h-4 w-4" />
+                <Plus className="mr-2 h-4 w-4" />
                 <span>Currency Exchange</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleCommandSelect("/batch-payments/create")}>
-                <CreditCard className="mr-2 h-4 w-4" />
-                <span>Batch Payment</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => handleCommandSelect("/accounts/create")}>
-                <Building2 className="mr-2 h-4 w-4" />
+                <Plus className="mr-2 h-4 w-4" />
                 <span>New Account</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleCommandSelect("/sandbox")}>
-                <FlaskConical className="mr-2 h-4 w-4" />
+                <Plus className="mr-2 h-4 w-4" />
                 <span>Sandbox Simulation</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Theme Toggle */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" onClick={toggleTheme}>
-                {theme === "dark" ? (
-                  <Sun className="h-5 w-5" />
-                ) : (
-                  <Moon className="h-5 w-5" />
-                )}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              {theme === "dark" ? "Light mode" : "Dark mode"}
-            </TooltipContent>
-          </Tooltip>
+          {/* Secondary Icons */}
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-9 w-9 border border-gray-200 rounded-md hover:bg-gray-50"
+            onClick={onSearchClick}
+          >
+            <Keyboard className="h-4 w-4 text-gray-600" />
+          </Button>
+          
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-9 w-9 border border-gray-200 rounded-md hover:bg-gray-50"
+          >
+            <Compass className="h-4 w-4 text-gray-600" />
+          </Button>
+          
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-9 w-9 border border-gray-200 rounded-md hover:bg-gray-50"
+          >
+            <RefreshCw className="h-4 w-4 text-gray-600" />
+          </Button>
 
-          {/* Notification Bell with Dropdown */}
+          {/* Search Bar */}
+          <div 
+            className="relative w-64 cursor-pointer"
+            onClick={onSearchClick}
+          >
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              placeholder="Search"
+              readOnly
+              className="pl-9 pr-12 h-9 rounded-full border-gray-200 bg-gray-50 cursor-pointer hover:bg-gray-100"
+            />
+            <div className="absolute right-2 top-1/2 -translate-y-1/2">
+              <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-gray-100 px-1.5 font-mono text-[10px] font-medium text-gray-500">
+                <span className="text-xs">⌘</span>K
+              </kbd>
+            </div>
+          </div>
+
+          {/* Notifications */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5" />
-                <span 
-                  className="absolute top-1 right-1 w-2 h-2 rounded-full" 
-                  style={{ backgroundColor: "hsl(var(--destructive))" }}
-                />
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="relative h-9 w-9 rounded-md border border-gray-200 hover:bg-gray-50"
+              >
+                <Bell className="h-4 w-4 text-gray-600" />
+                <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                  3
+                </span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-80">
-              <DropdownMenuLabel className="flex justify-between items-center">
+              <DropdownMenuLabel className="flex justify-between">
                 <span>Notifications</span>
                 <Badge variant="secondary" className="text-xs">3 new</Badge>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="flex flex-col items-start gap-1 py-3 cursor-pointer">
+              <DropdownMenuItem className="flex flex-col items-start gap-1 py-3">
                 <div className="flex justify-between w-full">
                   <span className="font-medium">Payment Received</span>
                   <span className="text-xs text-muted-foreground">2m ago</span>
                 </div>
                 <span className="text-sm text-muted-foreground">ABC Corp sent you £5,234.50</span>
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex flex-col items-start gap-1 py-3 cursor-pointer">
+              <DropdownMenuItem className="flex flex-col items-start gap-1 py-3">
                 <div className="flex justify-between w-full">
                   <span className="font-medium">Account Verified</span>
                   <span className="text-xs text-muted-foreground">1h ago</span>
                 </div>
                 <span className="text-sm text-muted-foreground">Your account has been verified</span>
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex flex-col items-start gap-1 py-3 cursor-pointer">
-                <div className="flex justify-between w-full">
-                  <span className="font-medium">Batch Complete</span>
-                  <span className="text-xs text-muted-foreground">3h ago</span>
-                </div>
-                <span className="text-sm text-muted-foreground">15 payments processed successfully</span>
-              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="justify-center text-primary">
+              <DropdownMenuItem className="justify-center text-primary font-medium">
                 View all notifications
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Help */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <HelpCircle className="h-5 w-5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Help & Documentation</TooltipContent>
-          </Tooltip>
-
-          {/* Divider */}
-          <div 
-            className="h-5 w-px mx-1" 
-            style={{ backgroundColor: "hsl(var(--border))" }}
-          />
+          {/* Theme Toggle */}
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-9 w-9 border border-gray-200 rounded-md hover:bg-gray-50"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          >
+            {theme === "dark" ? (
+              <Sun className="h-4 w-4 text-gray-600" />
+            ) : (
+              <Moon className="h-4 w-4 text-gray-600" />
+            )}
+          </Button>
 
           {/* User Avatar */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full h-8 w-8">
-                <Avatar className="h-8 w-8">
+              <Button variant="ghost" className="gap-2 h-9 px-2 rounded-full border border-gray-200 hover:bg-gray-50">
+                <Avatar className="h-7 w-7">
                   <AvatarImage src="" alt="User" />
-                  <AvatarFallback
-                    style={{ 
-                      backgroundColor: "hsl(var(--primary))", 
-                      color: "hsl(var(--primary-foreground))" 
-                    }}
-                  >
-                    JD
-                  </AvatarFallback>
+                  <AvatarFallback className="bg-slate-900 text-white text-xs">KP</AvatarFallback>
                 </Avatar>
+                <span className="text-sm font-medium text-gray-700">Krish</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>
                 <div className="flex flex-col">
-                  <span>John Doe</span>
-                  <span className="text-xs font-normal" style={{ color: "hsl(var(--muted-foreground))" }}>
-                    john@instance.cloud
-                  </span>
+                  <span>Krish Patel</span>
+                  <span className="text-xs font-normal text-muted-foreground">krish@stvble.com</span>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Profile</DropdownMenuItem>
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive">Sign out</DropdownMenuItem>
+              <DropdownMenuItem className="text-red-600">Sign out</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
