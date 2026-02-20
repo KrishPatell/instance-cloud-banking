@@ -75,7 +75,6 @@ const navItems = [
         title: "Simulate inbound payment",
         href: "/sandbox",
         icon: FlaskConical,
-        label: "Sandbox",
       },
     ],
   },
