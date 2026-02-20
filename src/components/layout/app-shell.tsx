@@ -31,7 +31,12 @@ interface AppShellProps {
 }
 
 export function AppShell({ children }: AppShellProps) {
-  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(() => { if (typeof window === "undefined") return false; return localStorage.getItem("sidebarCollapsed") === "true"; })
+  
+  // Persist sidebar state
+  React.useEffect(() => {
+    localStorage.setItem("sidebarCollapsed", String(sidebarCollapsed));
+  }, [sidebarCollapsed]);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
@@ -41,6 +46,11 @@ export function AppShell({ children }: AppShellProps) {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setOpen((open) => !open);
+      }
+      // Cmd+B to toggle sidebar
+      if (e.key === "b" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setSidebarCollapsed((prev) => !prev);
       }
     };
 
