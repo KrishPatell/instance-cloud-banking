@@ -58,12 +58,12 @@ const navItems = [
       },
       {
         title: "Create internal transfer",
-        href: "/transfers/create",
+        href: "/payments/create?tab=internal&type=internal",
         icon: ArrowLeftRight,
       },
       {
         title: "Create currency exchange",
-        href: "/exchange/create",
+        href: "/payments/create?tab=exchange&type=exchange",
         icon: RefreshCw,
       },
       {

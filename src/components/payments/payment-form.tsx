@@ -39,15 +39,16 @@ type PaymentFormValues = z.infer<typeof paymentSchema>;
 
 interface PaymentFormProps {
   onSuccess?: () => void;
+  defaultType?: "outbound" | "internal" | "exchange";
 }
 
-export function PaymentForm({ onSuccess }: PaymentFormProps) {
+export function PaymentForm({ onSuccess, defaultType = "outbound" }: PaymentFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<PaymentFormValues>({
     resolver: zodResolver(paymentSchema),
     defaultValues: {
-      type: "outbound",
+      type: defaultType,
       fromAccountId: "",
       toAccountId: "",
       toName: "",
