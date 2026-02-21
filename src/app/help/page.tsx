@@ -17,6 +17,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
 type Section = "knowledge" | "tickets" | "chat" | "docs" | "videos" | "faq" | "contact";
@@ -54,12 +61,40 @@ const knowledgeBaseArticles: Article[] = [
 ];
 
 const faqData: FAQ[] = [
-  { question: "How do I reset my password?", answer: "Go to Settings > Security > Reset Password. You'll receive an email with a reset link.", category: "Account" },
-  { question: "What payment methods are supported?", answer: "We support bank transfers, SWIFT, and local currency payments in USD, EUR, GBP, and AED.", category: "Payments" },
-  { question: "How long do transfers take?", answer: "Local transfers typically complete within 1-2 business days. International transfers may take 3-5 business days.", category: "Payments" },
-  { question: "Can I issue virtual cards?", answer: "Yes, you can issue both physical and virtual corporate cards from the Cards section.", category: "Cards" },
-  { question: "What is the KYC process?", answer: "KYC (Know Your Customer) is a mandatory verification process. Submit your business documents and identity proof through Settings > Compliance.", category: "Compliance" },
-  { question: "How do I invite team members?", answer: "Go to Settings > Team > Invite Member. Enter their email and assign a role (Admin, Manager, or Viewer).", category: "Account" },
+  // General
+  { question: "What is Instance Cloud?", answer: "Instance Cloud is a comprehensive banking and payments platform designed for businesses. We provide corporate accounts, payment processing, corporate cards, and API integrations.", category: "General" },
+  { question: "How do I get started?", answer: "Sign up for an account, complete KYC verification, and you can start using our services. The entire process takes 5-10 minutes for basic setup.", category: "General" },
+  { question: "Is Instance Cloud secure?", answer: "Yes, we use bank-level security with 256-bit encryption, SOC 2 compliance, and regular security audits. Your funds are protected by industry-leading security measures.", category: "General" },
+  { question: "What countries and currencies do you support?", answer: "We support 150+ countries and 25+ currencies including USD, EUR, GBP, AED, and more. Check our documentation for the full list.", category: "General" },
+  { question: "How long is the KYC process?", answer: "Most KYC verifications complete within 1-2 business days. Some cases may take longer if additional documentation is required.", category: "General" },
+  { question: "What are the fees?", answer: "Our fee structure varies by service. Check Settings > Fees for detailed information on transaction fees, card fees, and account maintenance costs.", category: "General" },
+  { question: "How do I contact support?", answer: "You can reach us via live chat, support tickets, email at support@instance.cloud, or phone at +1 (555) 123-4567 during business hours.", category: "General" },
+  { question: "How is my data protected?", answer: "We use enterprise-grade encryption, comply with GDPR and local regulations, and never sell your data to third parties.", category: "General" },
+  // Payments
+  { question: "What payment methods are supported?", answer: "We support bank transfers (Wire, SWIFT, SEPA, ACH), real-time payments (Faster Payments, Instant), and internal transfers between Instance Cloud accounts.", category: "Payments" },
+  { question: "How long do transfers take?", answer: "Local transfers typically complete within 1-2 business days. International transfers may take 3-5 business days depending on the destination country.", category: "Payments" },
+  { question: "Can I schedule recurring payments?", answer: "Yes! You can set up recurring payments from the Transfers section. Schedule daily, weekly, monthly, or custom recurring transfers.", category: "Payments" },
+  { question: "What are the transaction limits?", answer: "Limits vary by account type and verification level. Check Settings > Fees for detailed information on your specific limits.", category: "Payments" },
+  { question: "Can I cancel a payment?", answer: "Payments can be cancelled if they haven't been processed yet. Go to Transactions, find the payment, and select Cancel if available.", category: "Payments" },
+  { question: "How do I track a payment?", answer: "All transactions appear in real-time in your Transactions dashboard. You can also set up webhooks for instant notifications.", category: "Payments" },
+  { question: "What if a payment fails?", answer: "Failed payments show a failed status with the reason. Common issues include insufficient funds, invalid beneficiary details, or compliance holds.", category: "Payments" },
+  // Accounts
+  { question: "How many accounts can I have?", answer: "You can create multiple accounts in different currencies. The number depends on your plan - Starter allows 5 accounts, Business allows unlimited.", category: "Accounts" },
+  { question: "Can I have accounts in multiple currencies?", answer: "Yes! You can hold balances in USD, EUR, GBP, AED, and many other currencies within a single organization.", category: "Accounts" },
+  { question: "How do I link a bank account?", answer: "Go to Accounts > Link Account to connect your external bank accounts for funding and withdrawals.", category: "Accounts" },
+  { question: "Can I close an account?", answer: "Yes, you can close accounts with zero balance. Contact support to close accounts with remaining funds for balance transfer.", category: "Accounts" },
+  { question: "How are balances calculated?", answer: "Balances update in real-time and include all completed transactions. Pending transactions may show as pending until cleared.", category: "Accounts" },
+  // Cards
+  { question: "How do I issue a corporate card?", answer: "Go to Cards > Create Card. Choose between physical or virtual, set spending limits, and assign to a team member.", category: "Cards" },
+  { question: "Can I set spending limits?", answer: "Yes! You can set daily, weekly, monthly limits per card, or block certain merchant categories.", category: "Cards" },
+  { question: "Can I suspend a card?", answer: "Yes, you can instantly suspend or block cards from the Cards dashboard. Suspended cards can be reactivated.", category: "Cards" },
+  { question: "Are digital cards available?", answer: "Yes, virtual cards are available instantly. Use them for online purchases, subscriptions, and digital payments.", category: "Cards" },
+  { question: "How long for physical card delivery?", answer: "Physical cards typically arrive within 5-7 business days. Express delivery available for an additional fee.", category: "Cards" },
+  { question: "What if my card is lost or stolen?", answer: "Immediately freeze or cancel the card from the Cards section. You can order a replacement card with next-day delivery.", category: "Cards" },
+  // API
+  { question: "How do I get API keys?", answer: "Generate API keys from Settings > API Configuration. Keep your keys secure - they're only shown once.", category: "API" },
+  { question: "What API authentication do you use?", answer: "We use API keys for server-to-server and OAuth 2.0 for user-authorized integrations.", category: "API" },
+  { question: "Do you have a sandbox environment?", answer: "Yes! Use your sandbox API keys for testing. Sandbox transactions don't affect real accounts or incur fees.", category: "API" },
 ];
 
 const popularTopics = [
@@ -106,6 +141,25 @@ export default function HelpPage() {
   const [chatMessages, setChatMessages] = useState([
     { from: "bot", text: "Hello! I'm here to help. What questions do you have?" }
   ]);
+  const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
+  const [faqCategory, setFaqCategory] = useState("all");
+  const [ticketSearch, setTicketSearch] = useState("");
+  const [ticketStatusFilter, setTicketStatusFilter] = useState("all");
+
+  // Get unique FAQ categories
+  const faqCategories = ["all", ...new Set(faqData.map(f => f.category))];
+  
+  // Filter FAQs by category
+  const filteredFaqs = faqCategory === "all" 
+    ? faqData 
+    : faqData.filter(f => f.category === faqCategory);
+
+  // Filter tickets
+  const filteredTickets = tickets.filter(t => {
+    const matchesSearch = t.subject.toLowerCase().includes(ticketSearch.toLowerCase());
+    const matchesStatus = ticketStatusFilter === "all" || t.status === ticketStatusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -485,27 +539,68 @@ export default function HelpPage() {
               {/* Tickets List */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Your Tickets</CardTitle>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <CardTitle>Your Tickets</CardTitle>
+                    <div className="flex flex-wrap gap-2">
+                      <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input 
+                          placeholder="Search tickets..." 
+                          value={ticketSearch}
+                          onChange={(e) => setTicketSearch(e.target.value)}
+                          className="pl-9 w-[200px]"
+                        />
+                      </div>
+                      <Select value={ticketStatusFilter} onValueChange={setTicketStatusFilter}>
+                        <SelectTrigger className="w-[140px]">
+                          <SelectValue placeholder="Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Status</SelectItem>
+                          <SelectItem value="open">Open</SelectItem>
+                          <SelectItem value="pending">Pending</SelectItem>
+                          <SelectItem value="resolved">Resolved</SelectItem>
+                          <SelectItem value="closed">Closed</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-3">
-                    {tickets.map((ticket) => (
-                      <div key={ticket.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <span className="font-mono text-sm text-muted-foreground">{ticket.id}</span>
-                            <Badge className={getPriorityColor(ticket.priority)}>{ticket.priority}</Badge>
-                          </div>
-                          <p className="font-medium">{ticket.subject}</p>
-                          <p className="text-sm text-muted-foreground">Created: {ticket.created} • Updated: {ticket.updated}</p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <Badge className={getStatusColor(ticket.status)}>{ticket.status}</Badge>
-                          <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                        </div>
+                  {filteredTickets.length === 0 ? (
+                    <div className="text-center py-12">
+                      <div className="h-16 w-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Ticket className="h-8 w-8 text-muted-foreground" />
                       </div>
-                    ))}
-                  </div>
+                      <h3 className="text-lg font-semibold mb-2">No support tickets</h3>
+                      <p className="text-muted-foreground mb-4">You haven't created any support tickets yet.</p>
+                      <Button>Create Your First Ticket</Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {filteredTickets.map((ticket) => (
+                        <div key={ticket.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono text-sm text-muted-foreground">{ticket.id}</span>
+                              <Badge className={getPriorityColor(ticket.priority)}>{ticket.priority}</Badge>
+                            </div>
+                            <p className="font-medium">{ticket.subject}</p>
+                            <p className="text-sm text-muted-foreground">Created: {ticket.created} • Updated: {ticket.updated}</p>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <Badge className={getStatusColor(ticket.status)}>
+                              {ticket.status === "open" && "🟢 Open"}
+                              {ticket.status === "pending" && "🟡 Pending"}
+                              {ticket.status === "resolved" && "🔵 Resolved"}
+                              {ticket.status === "closed" && "⚪ Closed"}
+                            </Badge>
+                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -681,21 +776,52 @@ export default function HelpPage() {
                 <p className="text-muted-foreground">Quick answers to common questions</p>
               </div>
 
-              <div className="space-y-4">
-                {faqData.map((faq, i) => (
-                  <Card key={i}>
-                    <CardHeader>
-                      <div className="flex items-start gap-3">
-                        <QuestionIcon className="h-5 w-5 text-primary mt-0.5" />
-                        <div>
-                          <CardTitle className="text-base">{faq.question}</CardTitle>
-                          <Badge variant="outline" className="mt-2">{faq.category}</Badge>
+              {/* Category Filter */}
+              <div className="flex flex-wrap gap-2">
+                {faqCategories.map(cat => (
+                  <Button
+                    key={cat}
+                    variant={faqCategory === cat ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setFaqCategory(cat)}
+                  >
+                    {cat === "all" ? "All" : cat}
+                    <Badge variant="secondary" className="ml-2">
+                      {cat === "all" ? faqData.length : faqData.filter(f => f.category === cat).length}
+                    </Badge>
+                  </Button>
+                ))}
+              </div>
+
+              {/* FAQ Items */}
+              <div className="space-y-3">
+                {filteredFaqs.map((faq, i) => (
+                  <Card key={i} className={expandedFaq === `${faqCategory}-${i}` ? "border-primary" : ""}>
+                    <CardHeader 
+                      className="cursor-pointer hover:bg-muted/50 transition-colors"
+                      onClick={() => setExpandedFaq(expandedFaq === `${faqCategory}-${i}` ? null : `${faqCategory}-${i}`)}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-start gap-3">
+                          <QuestionIcon className={cn("h-5 w-5 mt-0.5", expandedFaq === `${faqCategory}-${i}` ? "text-primary" : "text-muted-foreground")} />
+                          <div>
+                            <CardTitle className="text-base">{faq.question}</CardTitle>
+                            <Badge variant="outline" className="mt-2">{faq.category}</Badge>
+                          </div>
                         </div>
+                        <ChevronRight className={cn("h-5 w-5 text-muted-foreground transition-transform", expandedFaq === `${faqCategory}-${i}` && "rotate-90")} />
                       </div>
                     </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground">{faq.answer}</p>
-                    </CardContent>
+                    {expandedFaq === `${faqCategory}-${i}` && (
+                      <CardContent className="pt-0">
+                        <p className="text-muted-foreground pl-8">{faq.answer}</p>
+                        <div className="flex items-center gap-2 mt-4 pl-8">
+                          <span className="text-sm text-muted-foreground">Was this helpful?</span>
+                          <Button variant="outline" size="sm">👍 Yes</Button>
+                          <Button variant="outline" size="sm">👎 No</Button>
+                        </div>
+                      </CardContent>
+                    )}
                   </Card>
                 ))}
               </div>
