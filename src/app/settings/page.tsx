@@ -7,7 +7,8 @@ import { useTheme } from "next-themes";
 import { 
   Settings, Copy, Sun, Moon, Monitor, CreditCard, ExternalLink, 
   Pencil, Plus, MoreVertical, Trash2, UserCog, Mail, Bell, Globe,
-  Info, Loader2, Check
+  Info, Loader2, Check, Building2, Users, Receipt, Smartphone, 
+  Shield, Key, AlertTriangle, CheckCircle2, XCircle
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/page-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -72,36 +73,41 @@ function SettingsContent() {
       />
 
       <Tabs value={activeTab} onValueChange={handleTabChange}>
-        <TabsList className="border-b border-border bg-transparent h-auto p-0 gap-0">
+        <TabsList className="grid w-full max-w-2xl grid-cols-5 bg-muted/50 p-1 rounded-xl h-auto">
           <TabsTrigger 
             value="general" 
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-primary px-4 pb-3 font-medium text-sm"
+            className="flex flex-col items-center gap-1 py-3 px-2 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all"
           >
-            General
+            <Building2 className="h-4 w-4" />
+            <span className="text-xs font-medium">General</span>
           </TabsTrigger>
           <TabsTrigger 
             value="fees" 
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-primary px-4 pb-3 font-medium text-sm"
+            className="flex flex-col items-center gap-1 py-3 px-2 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all"
           >
-            Fees
+            <Receipt className="h-4 w-4" />
+            <span className="text-xs font-medium">Fees</span>
           </TabsTrigger>
           <TabsTrigger 
             value="team" 
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-primary px-4 pb-3 font-medium text-sm"
+            className="flex flex-col items-center gap-1 py-3 px-2 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all"
           >
-            Team
+            <Users className="h-4 w-4" />
+            <span className="text-xs font-medium">Team</span>
           </TabsTrigger>
           <TabsTrigger 
             value="app" 
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-primary px-4 pb-3 font-medium text-sm"
+            className="flex flex-col items-center gap-1 py-3 px-2 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all"
           >
-            App
+            <Smartphone className="h-4 w-4" />
+            <span className="text-xs font-medium">App</span>
           </TabsTrigger>
           <TabsTrigger 
             value="billing" 
-            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:text-primary px-4 pb-3 font-medium text-sm"
+            className="flex flex-col items-center gap-1 py-3 px-2 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all"
           >
-            Billing
+            <CreditCard className="h-4 w-4" />
+            <span className="text-xs font-medium">Billing</span>
           </TabsTrigger>
         </TabsList>
 

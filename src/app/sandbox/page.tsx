@@ -62,7 +62,7 @@ export default function SandboxPage() {
       <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-4 flex items-start gap-3">
         <FlaskConical className="h-6 w-6 text-amber-600 shrink-0 mt-0.5" />
         <div>
-          <p className="font-semibold text-amber-800 dark:text-amber-200">Sandbox Mode Active</p>
+          <p className="font-semibold text-yellow-700 dark:text-yellow-400">Sandbox Mode Active</p>
           <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
             All actions in this environment are simulated and will not affect real accounts or balances.
             Use this for testing, demos, and development.
