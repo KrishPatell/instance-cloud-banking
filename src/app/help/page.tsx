@@ -326,6 +326,93 @@ export default function HelpPage() {
                   </CardContent>
                 </Card>
               </div>
+
+              {/* Info Box */}
+              <Card className="bg-blue-50 border-blue-200">
+                <CardContent className="p-4 flex items-start gap-3">
+                  <div className="h-8 w-8 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
+                    <HelpCircle className="h-5 w-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-blue-900">Need more help?</h4>
+                    <p className="text-sm text-blue-700 mt-1">
+                      Check our fees page for current transaction rates and limits.
+                    </p>
+                    <Button variant="link" className="text-blue-600 p-0 h-auto mt-1">
+                      View Fees <ArrowRight className="h-3 w-3 ml-1" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Related Articles */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Related Articles</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 cursor-pointer transition-colors">
+                    <div>
+                      <p className="font-medium text-sm">How to Schedule Recurring Payments</p>
+                      <p className="text-xs text-muted-foreground">5 min read</p>
+                    </div>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                  <div className="flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 cursor-pointer transition-colors">
+                    <div>
+                      <p className="font-medium text-sm">Understanding Transaction Fees</p>
+                      <p className="text-xs text-muted-foreground">3 min read</p>
+                    </div>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                  <div className="flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 cursor-pointer transition-colors">
+                    <div>
+                      <p className="font-medium text-sm">Beneficiary Management Guide</p>
+                      <p className="text-xs text-muted-foreground">6 min read</p>
+                    </div>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                  <div className="flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 cursor-pointer transition-colors">
+                    <div>
+                      <p className="font-medium text-sm">Payment Status & Tracking</p>
+                      <p className="text-xs text-muted-foreground">4 min read</p>
+                    </div>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Feedback Section */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Was this article helpful?</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex gap-3">
+                    <Button variant="outline" className="gap-2">
+                      👍 Yes
+                    </Button>
+                    <Button variant="outline" className="gap-2">
+                      👎 No
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">If no, what was the issue?</label>
+                    <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                      <option>Select an option...</option>
+                      <option>Unclear / Confusing</option>
+                      <option>Outdated information</option>
+                      <option>Missing important details</option>
+                      <option>Doesn't match my situation</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button>Submit Feedback</Button>
+                    <Button variant="outline">Contact Support</Button>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           )}
 
