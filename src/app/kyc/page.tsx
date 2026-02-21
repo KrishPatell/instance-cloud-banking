@@ -422,10 +422,12 @@ export default function KYCPage() {
             <CardContent className="p-6 space-y-6">
               {/* Overview Tabs */}
               <Tabs defaultValue="overview">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="grid w-full grid-cols-6">
                   <TabsTrigger value="overview">Overview</TabsTrigger>
                   <TabsTrigger value="company">Company</TabsTrigger>
+                  <TabsTrigger value="ubo">UBO</TabsTrigger>
                   <TabsTrigger value="documents">Documents</TabsTrigger>
+                  <TabsTrigger value="risk">Risk</TabsTrigger>
                   <TabsTrigger value="timeline">Timeline</TabsTrigger>
                 </TabsList>
 
@@ -598,32 +600,180 @@ export default function KYCPage() {
                 </TabsContent>
 
                 <TabsContent value="company" className="mt-4">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Company Details</CardTitle>
-                      <CardDescription>Business entity information</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium">Company Name</label>
-                          <Input value={selectedClient.name} readOnly />
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {/* Legal Info */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <Shield className="h-4 w-4" />
+                          Legal Information
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Legal Entity Name</span>
+                          <span className="font-medium">{selectedClient.name} Inc.</span>
                         </div>
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium">Registration Number</label>
-                          <Input value={selectedClient.registrationNumber} readOnly />
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Registration Number</span>
+                          <span className="font-mono">{selectedClient.registrationNumber}</span>
                         </div>
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium">Country of Incorporation</label>
-                          <Input value={selectedClient.country} readOnly />
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Tax ID / VAT</span>
+                          <span className="font-mono">98-7654321</span>
                         </div>
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium">Industry</label>
-                          <Input value={selectedClient.industry} readOnly />
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Country</span>
+                          <span>{selectedClient.country}</span>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Business Start</span>
+                          <span>2008-06-15</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Business Type</span>
+                          <Badge variant="outline">Corporation</Badge>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">PEP Status</span>
+                          <Badge className="bg-green-100 text-green-800">No</Badge>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Operational Details */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <Activity className="h-4 w-4" />
+                          Operational Details
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Industry</span>
+                          <span>{selectedClient.industry}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Annual Revenue</span>
+                          <span>USD 50-100M</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Employee Count</span>
+                          <span>250-500</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Primary Activity</span>
+                          <span>B2B</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Website</span>
+                          <a href="#" className="text-primary hover:underline">www.acmecorp.com</a>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Address */}
+                    <Card className="md:col-span-2">
+                      <CardHeader>
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <MapPin className="h-4 w-4" />
+                          Registered Business Address
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Address Line 1</label>
+                            <Input defaultValue="456 Industrial Way" readOnly />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Address Line 2</label>
+                            <Input defaultValue="Suite 200" readOnly />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">City</label>
+                            <Input defaultValue="San Francisco" readOnly />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">State / Province</label>
+                            <Input defaultValue="California" readOnly />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Postal Code</label>
+                            <Input defaultValue="94105" readOnly />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Country</label>
+                            <Input defaultValue={selectedClient.country} readOnly />
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="ubo" className="mt-4">
+                  <div className="space-y-4">
+                    {/* UBO Risk */}
+                    <Card className="bg-green-50 border-green-200">
+                      <CardContent className="p-4 flex items-center gap-3">
+                        <Shield className="h-5 w-5 text-green-600" />
+                        <div>
+                          <p className="font-medium text-green-800">Overall UBO Risk: Low</p>
+                          <p className="text-sm text-green-700">No PEP connections detected</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* UBO Table */}
+                    <Card>
+                      <CardHeader className="flex flex-row items-center justify-between">
+                        <CardTitle>Ultimate Beneficial Owners</CardTitle>
+                        <Button size="sm"><Plus className="h-4 w-4 mr-2" />Add UBO</Button>
+                      </CardHeader>
+                      <CardContent>
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>Full Name</TableHead>
+                              <TableHead>Ownership</TableHead>
+                              <TableHead>Position</TableHead>
+                              <TableHead>PEP</TableHead>
+                              <TableHead>Nationality</TableHead>
+                              <TableHead>Status</TableHead>
+                              <TableHead className="text-right">Actions</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {[
+                              { name: "John Smith", ownership: 45, position: "CEO", pep: false, nationality: "United States", status: "verified" },
+                              { name: "Sarah Johnson", ownership: 35, position: "Director", pep: false, nationality: "United States", status: "verified" },
+                              { name: "Michael Chen", ownership: 20, position: "CFO", pep: false, nationality: "Canada", status: "verified" },
+                            ].map((ubo, i) => (
+                              <TableRow key={i}>
+                                <TableCell className="font-medium">{ubo.name}</TableCell>
+                                <TableCell>{ubo.ownership}%</TableCell>
+                                <TableCell>{ubo.position}</TableCell>
+                                <TableCell>
+                                  <Badge className={ubo.pep ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"}>
+                                    {ubo.pep ? "Yes" : "No"}
+                                  </Badge>
+                                </TableCell>
+                                <TableCell>{ubo.nationality}</TableCell>
+                                <TableCell>
+                                  <Badge className="bg-green-100 text-green-800">✓ Verified</Badge>
+                                </TableCell>
+                                <TableCell className="text-right">
+                                  <Button variant="ghost" size="sm">View</Button>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="documents" className="mt-4">
@@ -654,6 +804,130 @@ export default function KYCPage() {
                       </div>
                     </CardContent>
                   </Card>
+                </TabsContent>
+
+                <TabsContent value="risk" className="mt-4">
+                  <div className="space-y-4">
+                    {/* Risk Summary */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base">Risk Assessment Summary</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid md:grid-cols-3 gap-4 mb-4">
+                          <div className="text-center p-4 bg-yellow-50 rounded-lg">
+                            <p className="text-3xl font-bold text-yellow-600">{selectedClient.riskScore}/10</p>
+                            <p className="text-sm text-muted-foreground">Risk Score</p>
+                          </div>
+                          <div className="text-center p-4 bg-yellow-50 rounded-lg">
+                            <Badge className={getRiskColor(selectedClient.riskTier)}>
+                              {selectedClient.riskTier.toUpperCase()} RISK
+                            </Badge>
+                            <p className="text-sm text-muted-foreground mt-2">Risk Tier</p>
+                          </div>
+                          <div className="text-center p-4 bg-blue-50 rounded-lg">
+                            <p className="text-lg font-semibold">Standard</p>
+                            <p className="text-sm text-muted-foreground">Recommended KYC</p>
+                          </div>
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          <p>Last Assessed: 2026-02-19 at 09:15 UTC</p>
+                          <p>Next Assessment Due: 2026-05-19</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Risk Factors */}
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-sm">Jurisdiction Risk (40%)</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge className="bg-green-100 text-green-800">Low</Badge>
+                            <span className="text-sm text-muted-foreground">3/10</span>
+                          </div>
+                          <ul className="text-sm space-y-1">
+                            <li className="flex items-center gap-2"><Check className="h-3 w-3 text-green-600" /> Strong AML/CFT framework</li>
+                            <li className="flex items-center gap-2"><Check className="h-3 w-3 text-green-600" /> FATF compliant</li>
+                            <li className="flex items-center gap-2"><Check className="h-3 w-3 text-green-600" /> Transparent registry</li>
+                          </ul>
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-sm">Industry Risk (30%)</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge className="bg-yellow-100 text-yellow-800">Medium</Badge>
+                            <span className="text-sm text-muted-foreground">5/10</span>
+                          </div>
+                          <ul className="text-sm space-y-1">
+                            <li className="flex items-center gap-2"><AlertTriangle className="h-3 w-3 text-yellow-600" /> Manufacturing sector</li>
+                            <li className="flex items-center gap-2"><Check className="h-3 w-3 text-green-600" /> Established player</li>
+                            <li className="flex items-center gap-2"><Check className="h-3 w-3 text-green-600" /> 15+ years history</li>
+                          </ul>
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-sm">Ownership Risk (20%)</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge className="bg-green-100 text-green-800">Low</Badge>
+                            <span className="text-sm text-muted-foreground">4/10</span>
+                          </div>
+                          <ul className="text-sm space-y-1">
+                            <li className="flex items-center gap-2"><Check className="h-3 w-3 text-green-600" /> Clear UBO chain</li>
+                            <li className="flex items-center gap-2"><Check className="h-3 w-3 text-green-600" /> No PEP connections</li>
+                            <li className="flex items-center gap-2"><Check className="h-3 w-3 text-green-600" /> No shell company</li>
+                          </ul>
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-sm">Transaction Risk (10%)</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge className="bg-green-100 text-green-800">Low</Badge>
+                            <span className="text-sm text-muted-foreground">3/10</span>
+                          </div>
+                          <ul className="text-sm space-y-1">
+                            <li className="flex items-center gap-2"><Check className="h-3 w-3 text-green-600" /> Commensurate limits</li>
+                            <li className="flex items-center gap-2"><Check className="h-3 w-3 text-green-600" /> Normal patterns</li>
+                            <li className="flex items-center gap-2"><Check className="h-3 w-3 text-green-600" /> Low volatility</li>
+                          </ul>
+                        </CardContent>
+                      </Card>
+                    </div>
+
+                    {/* Compliance Checks */}
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-base">Regulatory Checks</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid md:grid-cols-2 gap-3">
+                          {[
+                            { name: "OFAC Sanctions", status: "clear" },
+                            { name: "UN Security Council", status: "clear" },
+                            { name: "EU High Risk Countries", status: "clear" },
+                            { name: "FATF Grey/Black List", status: "clear" },
+                          ].map((check, i) => (
+                            <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
+                              <span>{check.name}</span>
+                              <Badge className="bg-green-100 text-green-800">✓ Clear</Badge>
+                            </div>
+                          ))}
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-3">Last checked: 2026-02-19 09:15 UTC</p>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="timeline" className="mt-4">
