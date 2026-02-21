@@ -71,6 +71,23 @@ const popularTopics = [
   { name: "API Documentation", icon: Key, color: "bg-gray-100 text-gray-600" },
 ];
 
+const categories = [
+  { name: "Getting Started", icon: Zap, count: 12, color: "bg-blue-50 border-blue-200" },
+  { name: "Payments", icon: CreditCard, count: 24, color: "bg-green-50 border-green-200" },
+  { name: "Accounts", icon: Building2, count: 18, color: "bg-purple-50 border-purple-200" },
+  { name: "Corporate Cards", icon: CreditCard, count: 14, color: "bg-orange-50 border-orange-200" },
+  { name: "KYC & Security", icon: Shield, count: 20, color: "bg-red-50 border-red-200" },
+  { name: "Contact & Support", icon: Phone, count: 8, color: "bg-gray-50 border-gray-200" },
+];
+
+const mostViewedArticles = [
+  { title: "How to Create a Payment", helpful: 95, views: 248, rating: 5 },
+  { title: "Understanding Your Account Balance", helpful: 92, views: 156, rating: 5 },
+  { title: "Setting Up Corporate Cards", helpful: 88, views: 198, rating: 4 },
+  { title: "Troubleshooting Transaction Errors", helpful: 94, views: 312, rating: 5 },
+  { title: "KYC Documentation Requirements", helpful: 87, views: 145, rating: 4 },
+];
+
 const tickets: Ticket[] = [
   { id: "TKT-001", subject: "Unable to process international transfer", status: "open", priority: "high", created: "2026-02-20", updated: "2026-02-21" },
   { id: "TKT-002", subject: "Question about API rate limits", status: "pending", priority: "medium", created: "2026-02-19", updated: "2026-02-20" },
@@ -258,6 +275,56 @@ export default function HelpPage() {
                     </Card>
                   ))}
                 </div>
+              </div>
+
+              {/* Browse by Category */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Browse Articles by Category</h3>
+                <div className="grid gap-4 md:grid-cols-3">
+                  {categories.map((cat) => (
+                    <Card key={cat.name} className={cn("hover:shadow-md transition-shadow cursor-pointer border-2", cat.color)}>
+                      <CardContent className="p-4 flex items-center gap-4">
+                        <div className={cn("h-12 w-12 rounded-lg flex items-center justify-center", cat.color.replace("border-", "bg-").replace("50", "100"))}>
+                          <cat.icon className="h-6 w-6" />
+                        </div>
+                        <div>
+                          <h4 className="font-medium">{cat.name}</h4>
+                          <p className="text-sm text-muted-foreground">{cat.count} articles</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+
+              {/* Most Viewed Articles */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Most Helpful Articles</h3>
+                <Card>
+                  <CardContent className="p-0">
+                    <div className="divide-y">
+                      {mostViewedArticles.map((article, i) => (
+                        <div key={i} className="p-4 flex items-center justify-between hover:bg-muted/50 transition-colors cursor-pointer">
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-lg font-bold text-muted-foreground">{i + 1}.</span>
+                              <h4 className="font-medium">{article.title}</h4>
+                            </div>
+                            <div className="flex items-center gap-3 text-sm">
+                              <div className="flex items-center gap-1">
+                                {Array.from({ length: 5 }).map((_, j) => (
+                                  <Star key={j} className={cn("h-3 w-3", j < article.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300")} />
+                                ))}
+                              </div>
+                              <span className="text-muted-foreground">({article.views} views, {article.helpful}% helpful)</span>
+                            </div>
+                          </div>
+                          <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </div>
           )}
