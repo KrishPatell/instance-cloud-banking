@@ -17,6 +17,7 @@ import {
   Settings,
   LogOut,
   Keyboard,
+  HelpCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -166,6 +167,23 @@ export function Topbar({ onMenuClick, sidebarCollapsed = false, onSearchClick }:
                 <p><kbd className="font-mono">⌘K</kbd> Search</p>
                 <p><kbd className="font-mono">⌘B</kbd> Toggle sidebar</p>
               </div>
+            </TooltipContent>
+          </Tooltip>
+
+          {/* Help */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-9 w-9 rounded-lg"
+                onClick={() => router.push("/help")}
+              >
+                <HelpCircle className="h-4 w-4 text-gray-500" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              Help & Support
             </TooltipContent>
           </Tooltip>
 
